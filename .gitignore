@@ -1,0 +1,10 @@
+
+data/
+raw data/
+
+*.db
+*.db
+*.db
+.Rproj.user
+analysis/.Rhistory
+analysis/.RData
