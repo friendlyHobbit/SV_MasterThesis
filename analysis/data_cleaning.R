@@ -12,7 +12,7 @@ library(readxl)
 ##### import files #############################
 
 # location of files - Sita´s personal pc
-rawdata_dir <- "C:\\Git\\MA_thesis_SV\\raw data\\analysis"
+rawdata_dir <- "C:\\Git\\SV_MasterThesis\\raw data\\analysis"
 # location of files - Sita´s job pc
 
 
@@ -90,6 +90,11 @@ data_8_32_df$participant_id <- as.factor(data_8_32_df$participant_id)
 summary(data_8_32_df$participant_id)
 summary(data_72_df$participant_id)
 
+# combine
+exp_data_df <- rbind(data_8_32_df, data_72_df)
+summary(exp_data_df)
+
+
 # participant 313833 has more data than others in data_8_32_df, check out 
 check_p <- exp_data_df[exp_data_df$participant_id == 313833, ]
 # create comparison participant - 313833 has 5 entries for session_index 0, 319200 has 2
@@ -99,19 +104,36 @@ compare_p <- exp_data_df[exp_data_df$participant_id == 319200, ]
 summary(check_p$session_index)
 summary(compare_p$session_index)
 
-exp_data_df <- rbind(data_8_32_df, data_72_df)
-summary(exp_data_df)
+
+##### Calculate new variables ###################
+
+# accuracy
+exp_data_df$accuracy = ifelse(exp_data_df$participant_answer_state == exp_data_df$unique_chart_state, TRUE, FALSE) 
+
+# check the data
+check_df = subset(exp_data_df, select = c(chart_type,participant_answer_state,unique_chart_state,accuracy) )
+# remove empty rows
+check_df <- na.omit(check_df)
+summary(check_df)
+
+
+# reaction time
+exp_data_df$RT <- exp_data_df$trigger_time - exp_data_df$user_ready_time  
+
+# log tranform rt
+exp_data_df$RT_log <- log(exp_data_df$RT)
+
 
 
 
 ##### Data cleaning #############################
 
 # List of column names to convert to factors
-columns_to_convert <- c("id", "participant_id", "computer_uuid", "chart_type", "data_source", 
-                        "test_phase", "session_index", "session_type", "number_of_charts", "unique_chart_index",
-                        "unique_chart_state", "participant_answer_index", "participant_answer_state")
+#columns_to_convert <- c("id", "participant_id", "computer_uuid", "chart_type", "data_source", 
+#                        "test_phase", "session_index", "session_type", "number_of_charts", "unique_chart_index",
+#                        "unique_chart_state", "participant_answer_index", "participant_answer_state")
 
-exp_data_df[,columns_to_convert] <- lapply(exp_data_df[,columns_to_convert] , factor)
+#exp_data_df[,columns_to_convert] <- lapply(exp_data_df[,columns_to_convert] , factor)
 
 summary(exp_data_df)
 
