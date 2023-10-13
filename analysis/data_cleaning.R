@@ -105,25 +105,6 @@ summary(check_p$session_index)
 summary(compare_p$session_index)
 
 
-##### Calculate new variables ###################
-
-# accuracy
-exp_data_df$accuracy = ifelse(exp_data_df$participant_answer_state == exp_data_df$unique_chart_state, TRUE, FALSE) 
-
-# check the data
-check_df = subset(exp_data_df, select = c(chart_type,participant_answer_state,unique_chart_state,accuracy) )
-# remove empty rows
-check_df <- na.omit(check_df)
-summary(check_df)
-
-
-# reaction time
-exp_data_df$RT <- exp_data_df$trigger_time - exp_data_df$user_ready_time  
-
-# log tranform rt
-exp_data_df$RT_log <- log(exp_data_df$RT)
-
-
 
 
 ##### Data cleaning #############################
