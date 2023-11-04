@@ -88,7 +88,8 @@ ggplot(data = data_known_df, aes(x = accuracy, fill=test_phase)) +
 ##### RT - descriptives ####################
 
 # only take accurate cases
-data_known_RT_df <- data_known_df[data_known_df$accuracy==TRUE,]
+#data_known_RT_df <- data_known_df[data_known_df$accuracy==TRUE,]
+data_known_RT_df <- data_known_df
 
 
 # check outliers
@@ -141,6 +142,7 @@ print(bxp_RT_static)
 
 
 
+
 ##### RT - check normality #######################
 
 # test normality 
@@ -168,7 +170,15 @@ density_plots <- ggplot(data_known_RT_df, aes(x = RT_static_log)) +
 print(density_plots)
 
 
+
+
 ##### RT - ANOVA 3b*3w*2w ##########################
+
+# check n per participant
+agg_checkID <- agg_RT_ID %>%
+  group_by(participant_id) %>%
+  summarize(freq=n())
+
 
 agg_RT_ID <- ungroup(agg_RT_ID)
 
@@ -181,7 +191,23 @@ aov_static <- anova_test(data = agg_RT_ID,
                          effect.size = "pes")
 get_anova_table(aov_static, correction = "auto")
 
-# Interaction effect
+
+# Two way at chart_type level
+rt_twoway <- agg_RT_ID %>%
+  group_by(chart_type) %>%
+  anova_test(dv = rt_log_mean, wid = participant_id, within = c(number_of_charts, test_phase)) %>%
+  get_anova_table() %>%
+  adjust_pvalue(method = "bonferroni")
+rt_twoway
+get_anova_table(rt_twoway, correction = "auto")
+
+
+# Effect of number_of_charts at each chart_type X test_phase
+rt_effect <- agg_RT_ID %>%
+  group_by(chart_type, test_phase) %>%
+  anova_test(dv = rt_log_mean, wid = participant_id, within = number_of_charts)
+rt_effect
+get_anova_table(rt_effect, correction = "auto")
 
 
 # Pairwise comparisons 
