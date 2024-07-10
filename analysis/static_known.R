@@ -228,38 +228,16 @@ agg_check_observations
 agg_RT_ID <- ungroup(agg_RT_ID)
 
 
-# repeated measures ANOVA
-aov_static <- anova_test(data = agg_RT_ID, 
-                         dv = rt_mean_log, 
-                         wid = participant_id, 
-                         between = chart_type,
-                         within = c(number_of_charts),
-                         effect.size = "pes")
-get_anova_table(aov_static, correction = "auto")
+# two-way anova
+anova_result <- aov(rt_mean_log ~ chart_type * number_of_charts + Error(participant_id/number_of_charts), data = agg_RT_ID)
+summary(anova_result)
+
+# posthoc 
+pairwise.t.test(agg_RT_ID$rt_mean_log, agg_RT_ID$chart_type, p.adjust.method = "BH")
 
 
-# Two way at chart_type level
-rt_twoway <- agg_RT_ID %>%
-  group_by(chart_type) %>%
-  anova_test(dv = rt_mean_log, wid = participant_id, within = c(number_of_charts)) %>%
-  get_anova_table() %>%
-  adjust_pvalue(method = "BH")
-get_anova_table(rt_twoway, correction = "auto")
+# Print the results
 
-# Two way at number_of_charts level
-rt_twoway <- agg_RT_ID %>%
-  group_by(number_of_charts) %>%
-  anova_test(dv = rt_mean_log, wid = participant_id, within = c(chart_type)) %>%
-  get_anova_table() %>%
-  adjust_pvalue(method = "BH")
-get_anova_table(rt_twoway, correction = "auto")
 
-# Pairwise comparisons 
-rt_pwc <- agg_RT_ID %>%
-  group_by(number_of_charts) %>%
-  pairwise_t_test(
-    rt_mean_log ~ chart_type, paired = TRUE,  detailed = TRUE,
-    p.adjust.method = "BH"
-  )
-rt_pwc
+
 
