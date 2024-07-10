@@ -97,7 +97,8 @@ ggplot(data = data_static_df, aes(x = test_phase, fill=accuracy)) +
 ##### RT - prepare and check the data ####################
 
 # only take accurate cases
-data_static_RT_df <- data_static_df[data_static_df$accuracy==TRUE,]
+#data_static_RT_df <- data_static_df
+data_static_df <- data_static_df[data_static_df$accuracy=="correct",]
 
 # check outliers
 rt_outliers <- data_static_df %>%
@@ -106,7 +107,8 @@ rt_outliers <- data_static_df %>%
 rt_outliers
 
 # remove the outliers
-data_static_clean_df <- data_static_RT_df[!(data_static_RT_df$RT_static  %in% rt_outliers$RT_static),]
+data_static_clean_df <- data_static_df
+#data_static_clean_df <- data_static_RT_df[!(data_static_RT_df$RT_static  %in% rt_outliers$RT_static),]
 
 
 
@@ -122,6 +124,13 @@ agg_agg_RT_ID <- agg_RT_ID %>%
   group_by(participant_id) %>%
   summarize(freq=n())
 
+# check outliers
+rt_outliers <- agg_RT_ID %>%
+  group_by(chart_type, number_of_charts, test_phase) %>%
+  identify_outliers(rt_mean)
+rt_outliers
+
+agg_RT_ID_clean <- agg_RT_ID[!(agg_RT_ID$rt_mean  %in% rt_outliers$rt_mean),]
 
 
 # test normality 
@@ -169,6 +178,8 @@ print(bxp_RT_static)
 
 
 ##### RT - ANOVA 3b*3w*2w ##########################
+
+summary(agg_RT_ID)
 
 # check number of cases per conditions
 agg_check_observations <- agg_RT_ID %>%
