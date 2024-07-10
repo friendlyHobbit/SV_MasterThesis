@@ -11,198 +11,255 @@ library(rstatix)
 
 ##### Import data ############################
 
-# location of files - Sita´s personal pc
 data_dir <- "C:\\Git\\SV_MasterThesis\\data"
-# location of files - Sita´s job pc
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
 summary(all_data_df)
 
 
 
+##### Calculate new variables ###################
 
-##### Subset relevant data only - static known ################
+# accuracy
+all_data_df$accuracy = ifelse(all_data_df$participant_answer_index == all_data_df$unique_chart_index, TRUE, FALSE) 
 
-data_static_df <- all_data_df[all_data_df$is_dynamic == FALSE & all_data_df$test_phase == "performanceA", ]
-summary(data_static_df)
+# reaction time
+all_data_df$RT_static <- all_data_df$trigger_time - all_data_df$user_ready_time  
 
-# remove empty rows
-data_static_df <- data_static_df[rowSums(is.na(data_static_df)) != ncol(data_static_df), ]
 
-# subset data 32 and 8
-data_static_32_8_df <- data_static_df[data_static_df$number_of_charts != 72, ]
 
-# check the data
-check_df = subset(data_static_32_8_df, select = c(chart_type,participant_answer_state,unique_chart_state,accuracy) )
 
-summary(check_df)
 
-# Data formatting 
-# List of column names to convert to factors
+##### Data formatting ##################################
+
 columns_to_convert <- c("id", "participant_id", "computer_uuid", "chart_type", "data_source", 
                         "test_phase", "session_index", "session_type", "number_of_charts", "unique_chart_index",
                         "unique_chart_state", "participant_answer_index", "participant_answer_state")
 
-data_static_df[,columns_to_convert] <- lapply(data_static_df[,columns_to_convert] , factor)
-data_static_32_8_df[,columns_to_convert] <- lapply(data_static_32_8_df[,columns_to_convert] , factor)
-
-summary(data_static_df)
-summary(data_static_32_8_df)
+all_data_df[,columns_to_convert] <- lapply(all_data_df[,columns_to_convert] , factor)
 
 
 
-##### Descriptive statistics - accuracy ##########################
 
-# check the data
-check_df = subset(data_static_32_8_df, select = c(chart_type,participant_answer_index,unique_chart_index,accuracy) )
+##### Subset static #######################
+
+data_static_known_df <- all_data_df[all_data_df$is_dynamic == FALSE &
+                                  all_data_df$test_phase == "performanceA" ,] 
+
+# remove empty rows
+data_static_known_df <- data_static_known_df[rowSums(is.na(data_static_known_df)) != ncol(data_static_known_df), ]
+
+summary(data_static_known_df)
+summary(data_static_known_df$participant_id)
 
 
-summary(data_static_32_8_df$accuracy)
+# nice lables
+data_static_known_df$chart_type <- factor(data_static_known_df$chart_type, levels = c("eid", "ibc", "ibq"), 
+                                          labels = c("CCD", "ID4", "ID1"))
 
-accuracy_table <- table(data_static_32_8_df$chart_type, data_static_32_8_df$accuracy, group=data_static_32_8_df$number_of_charts)
-accuracy_table
+data_static_known_df$test_phase <- factor(data_static_known_df$test_phase, levels = c("performanceA", "performanceB"),
+                                          labels = c("state known", "state unknown"))
+
+data_static_known_df$accuracy <- factor(data_static_known_df$accuracy, levels = c(FALSE, TRUE),
+                                        labels = c("incorrect", "correct"))
 
 
-# aggregate per person, per display type, per number_charts, per accuracy
-agg_accuracy_ID <- data_static_32_8_df %>%
-  group_by(participant_id, chart_type, number_of_charts, accuracy) %>%
+
+##### Check data per condition ##################
+
+# get mean and median for each condition
+RTperCondition_df <- data_static_known_df %>%
+  group_by(chart_type, number_of_charts) %>%
+  summarise(frequency=n(), rt_median=median(RT_static), rt_mean=mean(RT_static))
+
+# check which participant has missing data
+check_ID_df <- data_static_known_df %>%
+  group_by(participant_id) %>%
+  summarise(frequency=n())
+
+# get participant with freq less than 12
+participant_id <- check_ID_df$participant_id[check_ID_df$frequency < 12 ]
+
+# get missing chart_type and number (frequency less than 40)
+chart_type <- RTperCondition_df$chart_type[RTperCondition_df$frequency < 40]
+number_of_charts <- RTperCondition_df$number_of_charts[RTperCondition_df$frequency < 40]
+
+
+# impute median of missing condition
+RT_static <- RTperCondition_df$rt_median[RTperCondition_df$frequency < 40]
+
+# create new temp df
+column_names <- colnames(data_static_known_df)
+temp_df <- data.frame(matrix(ncol = length(column_names), nrow = 4))
+colnames(temp_df) <- column_names
+
+temp_df$participant_id <- c(participant_id, participant_id, participant_id, participant_id)
+temp_df$chart_type <- c(chart_type, chart_type, chart_type, chart_type)
+temp_df$number_of_charts <- c(number_of_charts, number_of_charts, number_of_charts, number_of_charts)
+temp_df$RT_static <- c(RT_static, RT_static, RT_static, RT_static)
+
+
+# add missing data into data_static_known_df
+data_static_known_df <- rbind(data_static_known_df, temp_df)
+
+
+
+
+##### Accuracy descriptives ############################
+
+
+# aggregate per person, per display type, per dynamic, per number_charts, per accuracy
+agg_accuracy_ID <- data_static_known_df %>%
+  group_by(participant_id, chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/4) %>%
-  filter(accuracy == TRUE)
-
+  filter(accuracy == "correct")
 
 # accuracy per chart_type, number_of_charts
-agg_accuracy_tot <- data_static_32_8_df %>%
-  group_by(chart_type, number_of_charts, accuracy) %>%
+agg_accuracy_tot <- data_static_known_df %>%
+  group_by(chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/40) %>%
-  filter(accuracy == TRUE)
+  filter(accuracy == "correct")
 
-# plot
-ggplot(data = data_static_32_8_df, aes(x = accuracy)) +
-  geom_bar(position = 'dodge') +
+
+# bar plot accuracy
+ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
+  geom_bar(position = 'fill') +
   facet_grid(number_of_charts ~ chart_type) +
-  labs(x = "TRUE = accurate",  
-       fill = " ",  
-       y = "Accuracy cound",  
-       title = " ") 
+  labs(x = "Test phase",  
+       fill = "Accuracy",  
+       y = "proportion",  
+       title = " ") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
 
 
 
 
+##### RT - prepare and check the data ####################
 
-##### Descriptive statistics - RT #####################
+# only take accurate cases
+#data_static_known_df <- data_static_known_df[data_static_known_df$accuracy=="correct",]
 
-# remove inaccurate data points
-data_static_32_8_df<-data_static_32_8_df[data_static_32_8_df$accuracy==TRUE,]
 
-summary(data_static_32_8_df$RT)
-
-# aggregate so there is 1 value per person
-agg_32_8 <- data_static_32_8_df %>%
+# one RT value per person per display and N_charts
+# aggregate per person, per display type, per number_charts
+agg_RT_ID <- data_static_known_df %>%
   group_by(participant_id, chart_type, number_of_charts) %>%
-  summarize(rt_mean=mean(RT), rt_median=median(RT), frequency=n())
+  summarize(freq=n(), rt_median=median(RT_static), rt_mean=mean(RT_static))
 
-agg_median_32_8 <- agg_32_8 %>%
+# check number of data points per participant
+agg_agg_RT_ID <- agg_RT_ID %>%
+  group_by(participant_id) %>%
+  summarize(freq=n())
+
+
+
+# try transformations
+agg_RT_ID$rt_mean_log <- log(agg_RT_ID$rt_mean)
+agg_RT_ID$rt_mean_dev <- (1/agg_RT_ID$rt_mean)
+
+
+
+# test normality 
+shapiro_results <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
-  summarize(frequency=n(), rt_m=median(rt_median))
+  summarize(
+    Shapiro_Wilk_p_value = shapiro.test(rt_mean)$p.value,
+    Shapiro_Wilk_p_value_log = shapiro.test(rt_mean_log)$p.value,
+    Shapiro_Wilk_p_value_dev = shapiro.test(rt_mean_dev)$p.value
+  )
+print(shapiro_results)
+
+# distributions 
+density_plots <- ggplot(agg_RT_ID, aes(x = rt_mean_log)) +
+  geom_density(fill = "blue", alpha = 0.5) +  
+  facet_grid(chart_type ~ number_of_charts , scales = "free_x") +
+  labs(x = "RT_static_log", y = "Density") + 
+  theme_minimal() 
+print(density_plots)
 
 
-# plot results
-RT_boxplot <- ggplot(agg_32_8, aes(y = rt_median)) +
-  geom_boxplot(fill = "blue", alpha = 0.5) +  
-  facet_grid(chart_type ~ number_of_charts, scales = "free_x") +
-  labs(y = "RT median") +  
+# check outliers
+rt_outliers <- agg_RT_ID %>%
+  group_by(chart_type, number_of_charts) %>%
+  identify_outliers(rt_mean_log)
+rt_outliers
+
+
+
+
+############# RT descriptives ####################
+
+
+# RT per chart_type, number_of_charts
+agg_RT_tot <- agg_RT_ID %>%
+  group_by(chart_type, number_of_charts) %>%
+  summarize(freq=n(),
+            mean_rt = mean(rt_mean),
+            median_rt = median(rt_mean),
+            SD_rt = sd(rt_mean),
+            min_rt = min(rt_mean),
+            max_rt = max(rt_mean)
+            )
+
+
+# boxplots
+bxp_RT_static <- ggplot(agg_RT_ID, aes(y = rt_mean)) +
+  geom_boxplot() +  
+  facet_grid(number_of_charts ~ chart_type, scales = "free_x") +
+  labs(y = "RT_static_log") +  
   theme_minimal()  
-print(RT_boxplot)
+print(bxp_RT_static)
 
 
 
-##### Stats check - RT ##########################
 
-# check normality - not normal
-rt_shapiro_results <- data_static_32_8_df %>%
+
+
+##### RT - ANOVA 3b*3w*2w ##########################
+
+summary(agg_RT_ID)
+
+# check number of cases per conditions
+agg_check_observations <- agg_RT_ID %>%
   group_by(number_of_charts, chart_type) %>%
-  summarize(
-    Shapiro_Wilk_p_value = shapiro.test(RT)$p.value
-  )
-print(rt_shapiro_results)
+  summarize(freq=n())
+agg_check_observations
 
-ggdensity(data_static_32_8_df$RT)
-hist(data_static_32_8_df$RT)
-boxplot(data_static_32_8_df$RT)
-
-# distributions 
-density_plots <- ggplot(data_static_32_8_df, aes(x = RT)) +
-  geom_density(fill = "blue", alpha = 0.5) +  
-  facet_grid(chart_type ~ number_of_charts, scales = "free_x") +
-  labs(x = "RT", y = "Density") + 
-  theme_minimal() 
-print(density_plots)
+agg_RT_ID <- ungroup(agg_RT_ID)
 
 
-# apply log transform
-data_static_32_8_df$RT_log <- log(data_static_32_8_df$RT)
-
-# check normality log - normal!
-rt_shapiro_results <- data_static_32_8_df %>%
-  group_by(number_of_charts, chart_type) %>%
-  summarize(
-    Shapiro_Wilk_p_value = shapiro.test(RT_log)$p.value
-  )
-print(rt_shapiro_results)
-
-ggdensity(data_static_32_8_df$RT_log)
-hist(data_static_32_8_df$RT_log)
-boxplot(data_static_32_8_df$RT_log)
-
-# distributions 
-density_plots <- ggplot(data_static_32_8_df, aes(x = RT_log)) +
-  geom_density(fill = "blue", alpha = 0.5) +  
-  facet_grid(chart_type ~ number_of_charts, scales = "free_x") +
-  labs(x = "RT_log", y = "Density") + 
-  theme_minimal() 
-print(density_plots)
-
-
-
-
-##### Stats - RT ##########################
-
-agg_rt_log <- data_static_32_8_df %>%
-  group_by(participant_id, chart_type, number_of_charts) %>%
-  summarize(rt_mean=mean(RT), rt_log_mean=mean(RT_log), frequency=n())
-
-agg_rt_log <- ungroup(agg_rt_log)
-
-# repeated measures ANOVA: chart_type*number_of_charts (3b*2w)
-aov_static <- anova_test(data = agg_rt_log, 
-                         dv = rt_log_mean, 
+# repeated measures ANOVA
+aov_static <- anova_test(data = agg_RT_ID, 
+                         dv = rt_mean_log, 
                          wid = participant_id, 
                          between = chart_type,
-                         within = number_of_charts,
+                         within = c(number_of_charts),
                          effect.size = "pes")
 get_anova_table(aov_static, correction = "auto")
 
 
+# Two way at chart_type level
+rt_twoway <- agg_RT_ID %>%
+  group_by(chart_type) %>%
+  anova_test(dv = rt_mean_log, wid = participant_id, within = c(number_of_charts)) %>%
+  get_anova_table() %>%
+  adjust_pvalue(method = "BH")
+get_anova_table(rt_twoway, correction = "auto")
+
+# Two way at number_of_charts level
+rt_twoway <- agg_RT_ID %>%
+  group_by(number_of_charts) %>%
+  anova_test(dv = rt_mean_log, wid = participant_id, within = c(chart_type)) %>%
+  get_anova_table() %>%
+  adjust_pvalue(method = "BH")
+get_anova_table(rt_twoway, correction = "auto")
+
 # Pairwise comparisons 
-rt_pwc <- agg_rt_log %>%
+rt_pwc <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   pairwise_t_test(
-    rt_log_mean ~ chart_type, paired = TRUE,  detailed = TRUE,
-    p.adjust.method = "bonferroni"
+    rt_mean_log ~ chart_type, paired = TRUE,  detailed = TRUE,
+    p.adjust.method = "BH"
   )
 rt_pwc
 
-# plot
-bxp <- ggboxplot(
-  agg_rt_log, x = "chart_type", y = "rt_log_mean",
-  color = "number_of_charts", palette = "jco"
-)
-bxp
-
-rt_pwc <- rt_pwc %>% add_xy_position(x = "chart_type")
-bxp + 
-  stat_pvalue_manual(rt_pwc, tip.length = 0, hide.ns = TRUE) +
-  labs(
-    subtitle = get_test_label(aov_static, detailed = TRUE),
-    caption = get_pwc_label(rt_pwc)
-  )
