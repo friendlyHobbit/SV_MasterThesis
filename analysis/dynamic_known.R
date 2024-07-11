@@ -23,14 +23,13 @@ summary(all_data_df)
 
 ##### Subset dynamic 8, 32, 72 #######################
 
-data_dynamic_df <- all_data_df[all_data_df$is_dynamic == TRUE &
-                               (all_data_df$test_phase == "performanceB" |
-                                  all_data_df$test_phase == "performanceA") ,] 
+dynamic_known_df <- all_data_df[all_data_df$is_dynamic == TRUE &
+                                  all_data_df$test_phase == "performanceA" ,] 
 
 # remove empty rows
-data_dynamic_df <- data_dynamic_df[rowSums(is.na(data_dynamic_df)) != ncol(data_dynamic_df), ]
+dynamic_known_df <- dynamic_known_df[rowSums(is.na(dynamic_known_df)) != ncol(dynamic_known_df), ]
 
-summary(data_dynamic_df)
+summary(dynamic_known_df)
 
 
 
@@ -38,14 +37,13 @@ summary(data_dynamic_df)
 ##### Calculate new variables ###################
 
 # accuracy
-data_dynamic_df$accuracy = ifelse(data_dynamic_df$participant_answer_index == data_dynamic_df$unique_chart_index, TRUE, FALSE) 
+dynamic_known_df$accuracy = ifelse(dynamic_known_df$participant_answer_index == dynamic_known_df$unique_chart_index, TRUE, FALSE) 
 
 # reaction time
-data_dynamic_df$transition_after_corr <- (data_dynamic_df$transition_after-1)*5000
-data_dynamic_df$RT_dynamic <- data_dynamic_df$trigger_time - (data_dynamic_df$session_index + data_dynamic_df$transition_after_corr)  
+dynamic_known_df$transition_after_corr <- (dynamic_known_df$transition_after-1)*5000
+dynamic_known_df$RT_dynamic <- dynamic_known_df$trigger_time - (dynamic_known_df$session_index + dynamic_known_df$transition_after_corr)  
 
-# log tranform rt
-data_dynamic_df$RT_dynamic_log <- log(data_dynamic_df$RT_dynamic)
+
 
 
 
@@ -55,9 +53,9 @@ columns_to_convert <- c("id", "participant_id", "computer_uuid", "chart_type", "
                         "test_phase", "session_index", "session_type", "number_of_charts", "unique_chart_index",
                         "unique_chart_state", "participant_answer_index", "participant_answer_state")
 
-data_dynamic_df[,columns_to_convert] <- lapply(data_dynamic_df[,columns_to_convert] , factor)
+dynamic_known_df[,columns_to_convert] <- lapply(dynamic_known_df[,columns_to_convert] , factor)
 
-summary(data_dynamic_df)
+summary(dynamic_known_df)
 
 
 
@@ -66,49 +64,45 @@ summary(data_dynamic_df)
 ##### Accuracy descriptives ############################
 
 # aggregate per person, per display type, per number_charts, per accuracy
-agg_accuracy_ID <- data_dynamic_df %>%
+agg_accuracy_ID <- dynamic_known_df %>%
   group_by(participant_id, chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/4) %>%
   filter(accuracy == TRUE)
 
 # accuracy per chart_type, number_of_charts
-agg_accuracy_tot <- data_dynamic_df %>%
+agg_accuracy_tot <- dynamic_known_df %>%
   group_by(chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/40) %>%
   filter(accuracy == TRUE)
 
-# plot accuracy count
-ggplot(data = data_dynamic_df, aes(x = accuracy, fill=number_of_charts)) +
-  geom_bar(position = 'dodge') +
-  facet_grid(test_phase ~ chart_type) +
-  labs(x = "TRUE = accurate",  
-       fill = " ",  
-       y = "Accuracy frequency",  
-       title = " ") 
+
+# bar plot accuracy
+ggplot(data = dynamic_known_df, aes(x = test_phase, fill=accuracy)) +
+  geom_bar(position = 'fill') +
+  facet_grid(number_of_charts ~ chart_type) +
+  labs(x = "Test phase",  
+       fill = "Accuracy",  
+       y = "proportion",  
+       title = " ") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
 
 
 
 
 ##### RT - check normality #######################
 
-# only take accurate cases
-data_dynamic_RT_df <- data_dynamic_df[data_dynamic_df$accuracy==TRUE,]
-data_dynamic_RT_df <- data_dynamic_df
-
-
-summary(data_dynamic_RT_df)
-
 
 # test normality 
-shapiro_results <- data_dynamic_RT_df %>%
+shapiro_results <- dynamic_known_df %>%
   group_by(chart_type, number_of_charts, test_phase) %>%
   summarize(
     Shapiro_Wilk_p_value = shapiro.test(RT_dynamic)$p.value
   )
 print(shapiro_results)
 
+
 # distributions 
-density_plots <- ggplot(data_dynamic_RT_df, aes(x = RT_dynamic)) +
+density_plots <- ggplot(dynamic_known_df, aes(x = RT_dynamic)) +
   geom_density(fill = "blue", alpha = 0.5) +  
   facet_grid(chart_type ~ number_of_charts ~ test_phase , scales = "free_x") +
   labs(x = "RT_static_log", y = "Density") + 

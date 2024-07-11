@@ -43,53 +43,54 @@ all_data_df[,columns_to_convert] <- lapply(all_data_df[,columns_to_convert] , fa
 
 ##### Subset static #######################
 
-data_static_known_df <- all_data_df[all_data_df$is_dynamic == FALSE &
-                                  all_data_df$test_phase == "performanceA" ,] 
+data_static_unknown_df <- all_data_df[all_data_df$is_dynamic == FALSE &
+                                      all_data_df$test_phase == "performanceB" ,] 
 
 # remove empty rows
-data_static_known_df <- data_static_known_df[rowSums(is.na(data_static_known_df)) != ncol(data_static_known_df), ]
+data_static_unknown_df <- data_static_unknown_df[rowSums(is.na(data_static_unknown_df)) != ncol(data_static_unknown_df), ]
 
-summary(data_static_known_df)
-summary(data_static_known_df$participant_id)
+summary(data_static_unknown_df)
+summary(data_static_unknown_df$participant_id)
 
 
 # nice lables
-data_static_known_df$chart_type <- factor(data_static_known_df$chart_type, levels = c("eid", "ibc", "ibq"), 
+data_static_unknown_df$chart_type <- factor(data_static_unknown_df$chart_type, levels = c("eid", "ibc", "ibq"), 
                                           labels = c("CCD", "ID4", "ID1"))
 
-data_static_known_df$test_phase <- factor(data_static_known_df$test_phase, levels = c("performanceA", "performanceB"),
+data_static_unknown_df$test_phase <- factor(data_static_unknown_df$test_phase, levels = c("performanceA", "performanceB"),
                                           labels = c("state known", "state unknown"))
 
-data_static_known_df$accuracy <- factor(data_static_known_df$accuracy, levels = c(FALSE, TRUE),
+data_static_unknown_df$accuracy <- factor(data_static_unknown_df$accuracy, levels = c(FALSE, TRUE),
                                         labels = c("incorrect", "correct"))
+
+
 
 
 
 ##### Check data per condition ##################
 
 # get mean and median for each condition
-RTperCondition_df <- data_static_known_df %>%
+RTperCondition_df <- data_static_unknown_df %>%
   group_by(chart_type, number_of_charts) %>%
   summarise(frequency=n(), rt_median=median(RT_static), rt_mean=mean(RT_static))
+RTperCondition_df
 
 # check which participant has missing data
-check_ID_df <- data_static_known_df %>%
+check_ID_df <- data_static_unknown_df %>%
   group_by(participant_id) %>%
   summarise(frequency=n())
+check_ID_df
 
 # get participant with freq less than 12
 participant_id <- check_ID_df$participant_id[check_ID_df$frequency < 12 ]
-
 # get missing chart_type and number (frequency less than 40)
 chart_type <- RTperCondition_df$chart_type[RTperCondition_df$frequency < 40]
 number_of_charts <- RTperCondition_df$number_of_charts[RTperCondition_df$frequency < 40]
-
-
 # impute median of missing condition
 RT_static <- RTperCondition_df$rt_median[RTperCondition_df$frequency < 40]
 
 # create new temp df
-column_names <- colnames(data_static_known_df)
+column_names <- colnames(data_static_unknown_df)
 temp_df <- data.frame(matrix(ncol = length(column_names), nrow = 4))
 colnames(temp_df) <- column_names
 
@@ -98,9 +99,9 @@ temp_df$chart_type <- c(chart_type, chart_type, chart_type, chart_type)
 temp_df$number_of_charts <- c(number_of_charts, number_of_charts, number_of_charts, number_of_charts)
 temp_df$RT_static <- c(RT_static, RT_static, RT_static, RT_static)
 
-
 # add missing data into data_static_known_df
-data_static_known_df <- rbind(data_static_known_df, temp_df)
+data_static_unknown_df <- rbind(data_static_unknown_df, temp_df)
+
 
 
 
@@ -108,20 +109,20 @@ data_static_known_df <- rbind(data_static_known_df, temp_df)
 ##### Accuracy descriptives ############################
 
 # aggregate per person, per display type, per dynamic, per number_charts, per accuracy
-agg_accuracy_ID <- data_static_known_df %>%
+agg_accuracy_ID <- data_static_unknown_df %>%
   group_by(participant_id, chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/4) %>%
   filter(accuracy == "correct")
 
 # accuracy per chart_type, number_of_charts
-agg_accuracy_tot <- data_static_known_df %>%
+agg_accuracy_tot <- data_static_unknown_df %>%
   group_by(chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/40) %>%
   filter(accuracy == "correct")
 
 
 # bar plot accuracy
-ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
+ggplot(data = data_static_unknown_df, aes(x = test_phase, fill=accuracy)) +
   geom_bar(position = 'fill') +
   facet_grid(number_of_charts ~ chart_type) +
   labs(x = "Test phase",  
@@ -141,7 +142,7 @@ ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
 
 # one RT value per person per display and N_charts
 # aggregate per person, per display type, per number_charts
-agg_RT_ID <- data_static_known_df %>%
+agg_RT_ID <- data_static_unknown_df %>%
   group_by(participant_id, chart_type, number_of_charts) %>%
   summarize(freq=n(), rt_median=median(RT_static), rt_mean=mean(RT_static))
 
@@ -154,8 +155,7 @@ agg_agg_RT_ID <- agg_RT_ID %>%
 
 # try transformations
 agg_RT_ID$rt_mean_log <- log(agg_RT_ID$rt_mean)
-agg_RT_ID$rt_mean_dev <- (1/agg_RT_ID$rt_mean)
-
+agg_RT_ID$rt_median_log <- log(agg_RT_ID$rt_median)
 
 
 # test normality 
@@ -164,12 +164,13 @@ shapiro_results <- agg_RT_ID %>%
   summarize(
     Shapiro_Wilk_p_value = shapiro.test(rt_mean)$p.value,
     Shapiro_Wilk_p_value_log = shapiro.test(rt_mean_log)$p.value,
-    Shapiro_Wilk_p_value_dev = shapiro.test(rt_mean_dev)$p.value
+    Shapiro_Wilk_p_value_median = shapiro.test(rt_median)$p.value,
+    Shapiro_Wilk_p_value_log_median = shapiro.test(rt_median_log)$p.value
   )
 print(shapiro_results)
 
 # distributions 
-density_plots <- ggplot(agg_RT_ID, aes(x = rt_mean_log)) +
+density_plots <- ggplot(agg_RT_ID, aes(x = rt_median_log)) +
   geom_density(fill = "blue", alpha = 0.5) +  
   facet_grid(chart_type ~ number_of_charts , scales = "free_x") +
   labs(x = "RT_static_log", y = "Density") + 
@@ -182,6 +183,8 @@ rt_outliers <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
   identify_outliers(rt_mean_log)
 rt_outliers
+
+
 
 
 
@@ -201,7 +204,7 @@ agg_RT_tot <- agg_RT_ID %>%
             se_rt = SD_rt / sqrt(n()),  # Standard Error
             ci_lower = mean_rt - qt(0.975, df=n()-1) * se_rt,  # Lower 95% CI
             ci_upper = mean_rt + qt(0.975, df=n()-1) * se_rt   # Upper 95% CI
-            )
+  )
 
 
 # boxplots
@@ -287,6 +290,13 @@ pwc <- agg_RT_ID %>%
     p.adjust.method = "bonferroni"
   )
 pwc
+
+
+
+
+
+
+
 
 
 
