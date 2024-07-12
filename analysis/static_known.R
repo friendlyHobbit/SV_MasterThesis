@@ -97,6 +97,7 @@ temp_df$participant_id <- c(participant_id, participant_id, participant_id, part
 temp_df$chart_type <- c(chart_type, chart_type, chart_type, chart_type)
 temp_df$number_of_charts <- c(number_of_charts, number_of_charts, number_of_charts, number_of_charts)
 temp_df$RT_static <- c(RT_static, RT_static, RT_static, RT_static)
+temp_df$test_phase <- c("state known", "state known", "state known", "state known")
 
 
 # add missing data into data_static_known_df
