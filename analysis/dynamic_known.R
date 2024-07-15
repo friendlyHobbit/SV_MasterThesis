@@ -40,9 +40,7 @@ summary(dynamic_known_df)
 dynamic_known_df$accuracy = ifelse(dynamic_known_df$participant_answer_index == dynamic_known_df$unique_chart_index, TRUE, FALSE) 
 
 # reaction time
-dynamic_known_df$transition_after_corr <- (dynamic_known_df$transition_after-1)*5000
-dynamic_known_df$RT_dynamic <- dynamic_known_df$trigger_time - (dynamic_known_df$session_index + dynamic_known_df$transition_after_corr)  
-
+dynamic_known_df$RT_dynamic <- (dynamic_known_df$trigger_time - dynamic_known_df$session_start_time) - (dynamic_known_df$transition_after*1000)
 
 
 
@@ -177,7 +175,7 @@ print(shapiro_results)
 
 
 # distributions 
-density_plots <- ggplot(agg_RT_ID, aes(x = rt_median)) +
+density_plots <- ggplot(agg_RT_ID, aes(x = rt_mean_log)) +
   geom_density(fill = "blue", alpha = 0.5) +  
   facet_grid(chart_type ~ number_of_charts , scales = "free_x") +
   labs(x = "RT_static_log", y = "Density") + 
@@ -188,7 +186,7 @@ print(density_plots)
 # check outliers
 rt_outliers <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
-  identify_outliers(rt_median)
+  identify_outliers(rt_mean_log)
 rt_outliers
 
 

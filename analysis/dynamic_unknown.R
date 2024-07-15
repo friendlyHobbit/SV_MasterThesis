@@ -40,8 +40,8 @@ summary(dynamic_unknown_df)
 dynamic_unknown_df$accuracy = ifelse(dynamic_unknown_df$participant_answer_index == dynamic_unknown_df$unique_chart_index, TRUE, FALSE) 
 
 # reaction time
-dynamic_unknown_df$transition_after_corr <- (dynamic_unknown_df$transition_after-1)*5000
-dynamic_unknown_df$RT_dynamic <- dynamic_unknown_df$trigger_time - (dynamic_unknown_df$session_index + dynamic_unknown_df$transition_after_corr)  
+dynamic_unknown_df$RT_dynamic <- (dynamic_unknown_df$trigger_time - dynamic_unknown_df$session_start_time) - (dynamic_unknown_df$transition_after*1000)
+
 
 
 
