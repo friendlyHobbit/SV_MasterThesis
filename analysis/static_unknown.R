@@ -11,7 +11,7 @@ library(rstatix)
 
 ##### Import data ############################
 
-data_dir <- "C:\\Git\\SV_MasterThesis\\data"
+data_dir <- "H:\\Git\\SV_MasterThesis\\data"
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
 summary(all_data_df)
@@ -224,9 +224,10 @@ CL_RT_static <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=cha
   geom_line(position = position_dodge(0.4)) +
   geom_point(position = position_dodge(0.4)) +
   labs(
-    x = "Number of Charts",
+    title = "static unknown",
+    x = "Number of displays",
     y = "Mean RT in msec",
-    colour = "Chart Type"
+    colour = "Display"
   )
 CL_RT_static
 

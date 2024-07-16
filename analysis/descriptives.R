@@ -12,7 +12,7 @@ library(rstatix)
 ##### Import data ############################
 
 # location of files 
-data_dir <- "C:\\Git\\SV_MasterThesis\\data"
+data_dir <- "H:\\Git\\SV_MasterThesis\\data"
 
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
@@ -188,12 +188,12 @@ agg_RT_ID$rt_median_dev <- (1/agg_RT_ID$rt_median)
 shapiro_results <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
   summarize(
-    #Shapiro_Wilk_p_value = shapiro.test(rt_mean)$p.value,
-    #Shapiro_Wilk_p_value_log = shapiro.test(rt_mean_log)$p.value,
-    #Shapiro_Wilk_p_value_dev = shapiro.test(rt_mean_dev)$p.value,
-    Shapiro_Wilk_p_value_median = shapiro.test(rt_median)$p.value,
-    Shapiro_Wilk_p_value_median_log = shapiro.test(rt_median_log)$p.value,
-    Shapiro_Wilk_p_value_median_dev = shapiro.test(rt_median_dev)$p.value
+    p_value = shapiro.test(rt_mean)$p.value,
+    p_value_log = shapiro.test(rt_mean_log)$p.value,
+    p_value_dev = shapiro.test(rt_mean_dev)$p.value,
+    p_value_median = shapiro.test(rt_median)$p.value,
+    p_value_median_log = shapiro.test(rt_median_log)$p.value,
+    p_value_median_dev = shapiro.test(rt_median_dev)$p.value
   )
 print(shapiro_results)
 
@@ -216,7 +216,7 @@ rt_outliers
 
 
 
-##### RT descriptives ############################
+##### RT descriptives - general ############################
 
 
 # RT per chart_type, number_of_charts
@@ -228,9 +228,9 @@ agg_RT_tot <- agg_RT_ID %>%
             SD_rt = sd(rt_median),
             min_rt = min(rt_median),
             max_rt = max(rt_median),
-            se_rt = SD_rt / sqrt(n()),  # Standard Error
-            ci_lower = mean_rt - qt(0.975, df=n()-1) * se_rt,  # Lower 95% CI
-            ci_upper = mean_rt + qt(0.975, df=n()-1) * se_rt   # Upper 95% CI
+            se_rt = SD_rt / sqrt(n()),  
+            ci_lower = mean_rt - qt(0.975, df=n()-1) * se_rt,  
+            ci_upper = mean_rt + qt(0.975, df=n()-1) * se_rt   
   )
 
 
@@ -240,16 +240,17 @@ CL_RT <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=chart_type
   geom_line(position = position_dodge(0.4)) +
   geom_point(position = position_dodge(0.4)) +
   labs(
-    x = "Number of Charts",
+    title = "General",
+    x = "Number of displays",
     y = "Mean RT in msec",
-    colour = "Chart Type"
+    colour = "Display"
   )
 CL_RT
 
 
 
 
-##### RT - ANOVA 3b*3w*2w ##########################
+##### RT - ANOVA 3b*3w*2w - general ##########################
 
 summary(agg_RT_ID)
 

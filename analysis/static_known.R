@@ -11,7 +11,7 @@ library(rstatix)
 
 ##### Import data ############################
 
-data_dir <- "C:\\Git\\SV_MasterThesis\\data"
+data_dir <- "H:\\Git\\SV_MasterThesis\\data"
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
 summary(all_data_df)
@@ -205,24 +205,16 @@ agg_RT_tot <- agg_RT_ID %>%
             )
 
 
-# boxplots
-bxp_RT_static <- ggplot(agg_RT_ID, aes(y = rt_mean)) +
-  geom_boxplot() +  
-  facet_grid(number_of_charts ~ chart_type, scales = "free_x") +
-  labs(y = "RT_static_log") +  
-  theme_minimal()  
-print(bxp_RT_static)
-
-
 # confidence interfall plot
 CL_RT_static <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=chart_type, group = chart_type)) + 
   geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.3, position = position_dodge(0.4)) +
   geom_line(position = position_dodge(0.4)) +
   geom_point(position = position_dodge(0.4)) +
   labs(
-    x = "Number of Charts",
+    title = "Static Known",
+    x = "Number of displays",
     y = "Mean RT in msec",
-    colour = "Chart Type"
+    colour = "Display"
   )
 CL_RT_static
 
