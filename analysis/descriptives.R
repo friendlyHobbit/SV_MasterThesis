@@ -35,17 +35,9 @@ summary(check_df)
 # reaction time
 all_data_df$RT_static <- all_data_df$trigger_time - all_data_df$user_ready_time  
 
-
-#### test
-# what´s the difference between user_ready_time, trigger_time, click time?
-all_data_df$RT2 <- (all_data_df$click_time - all_data_df$user_ready_time)  
-summary(all_data_df$RT2) 
-all_data_df$RT3 <- (all_data_df$trigger_time - all_data_df$user_ready_time)  
-summary(all_data_df$RT3) 
-
 # RT dynamic
 all_data_df$RT_dynamic <- (all_data_df$trigger_time - all_data_df$session_start_time) - (all_data_df$transition_after*1000)
-all_data_df$RT1 <- (all_data_df$click_time - all_data_df$trigger_time) - (all_data_df$transition_after*1000)
+
 
 
 summary(all_data_df$RT_dynamic)
