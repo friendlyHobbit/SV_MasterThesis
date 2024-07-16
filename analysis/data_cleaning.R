@@ -11,9 +11,8 @@ library(readxl)
 
 ##### import files #############################
 
-# location of files - Sita´s personal pc
-rawdata_dir <- "C:\\Git\\SV_MasterThesis\\raw data\\analysis"
-# location of files - Sita´s job pc
+# location of files
+rawdata_dir <- "H:\\Git\\SV_MasterThesis\\data\\"
 
 
 # check data 8_32 - Good
@@ -81,6 +80,7 @@ summary(data_72_df)
 
 # rename new_id to participant_id in
 colnames(data_72_df)[colnames(data_72_df) == "new_id"] = "participant_id"
+
 
 
 ##### combine DFs #############################
