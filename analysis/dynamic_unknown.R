@@ -13,7 +13,7 @@ library(rstatix)
 ##### Import data ############################
 
 # location of files 
-data_dir <- "H:\\Git\\SV_MasterThesis\\data"
+data_dir <- "C:\\Git\\SV_MasterThesis\\data"
 
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
@@ -175,7 +175,7 @@ print(shapiro_results)
 
 
 # distributions 
-density_plots <- ggplot(agg_RT_ID, aes(x = rt_median)) +
+density_plots <- ggplot(agg_RT_ID, aes(x = rt_mean_log)) +
   geom_density(fill = "blue", alpha = 0.5) +  
   facet_grid(chart_type ~ number_of_charts , scales = "free_x") +
   labs(x = "RT_static_log", y = "Density") + 
@@ -186,7 +186,7 @@ print(density_plots)
 # check outliers
 rt_outliers <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
-  identify_outliers(rt_median)
+  identify_outliers(rt_mean_log)
 rt_outliers
 
 
@@ -263,7 +263,7 @@ one.way <- agg_RT_ID %>%
   group_by(chart_type) %>%
   anova_test(dv = rt_mean_log, wid = participant_id, within = number_of_charts) %>%
   get_anova_table() %>%
-  adjust_pvalue(method = "bonferroni")
+  adjust_pvalue(method = "BH")
 one.way
 
 # Effect of chart_type at each number_of_charts
@@ -271,7 +271,7 @@ one.way <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   anova_test(dv = rt_mean_log, wid = participant_id, between = chart_type) %>%
   get_anova_table() %>%
-  adjust_pvalue(method = "bonferroni")
+  adjust_pvalue(method = "BH")
 one.way
 
 

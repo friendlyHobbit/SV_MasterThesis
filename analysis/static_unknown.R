@@ -11,7 +11,7 @@ library(rstatix)
 
 ##### Import data ############################
 
-data_dir <- "H:\\Git\\SV_MasterThesis\\data"
+data_dir <- "C:\\Git\\SV_MasterThesis\\data"
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
 summary(all_data_df)
@@ -209,15 +209,6 @@ agg_RT_tot <- agg_RT_ID %>%
   )
 
 
-# boxplots
-bxp_RT_static <- ggplot(agg_RT_ID, aes(y = rt_mean)) +
-  geom_boxplot() +  
-  facet_grid(number_of_charts ~ chart_type, scales = "free_x") +
-  labs(y = "RT_static_log") +  
-  theme_minimal()  
-print(bxp_RT_static)
-
-
 # confidence interfall plot
 CL_RT_static <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=chart_type, group = chart_type)) + 
   geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.3, position = position_dodge(0.4)) +
@@ -273,7 +264,7 @@ one.way <- agg_RT_ID %>%
   group_by(chart_type) %>%
   anova_test(dv = rt_mean_log, wid = participant_id, within = number_of_charts) %>%
   get_anova_table() %>%
-  adjust_pvalue(method = "bonferroni")
+  adjust_pvalue(method = "BH")
 one.way
 
 # Effect of chart_type at each number_of_charts
@@ -281,7 +272,7 @@ one.way <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   anova_test(dv = rt_mean_log, wid = participant_id, between = chart_type) %>%
   get_anova_table() %>%
-  adjust_pvalue(method = "bonferroni")
+  adjust_pvalue(method = "BH")
 one.way
 
 
@@ -290,7 +281,7 @@ pwc <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   pairwise_t_test(
     rt_mean_log ~ chart_type, paired = TRUE,
-    p.adjust.method = "bonferroni"
+    p.adjust.method = "BH"
   )
 pwc
 
