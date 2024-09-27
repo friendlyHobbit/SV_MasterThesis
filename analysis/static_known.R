@@ -116,9 +116,9 @@ agg_accuracy_ID <- data_static_known_df %>%
 
 # accuracy per chart_type, number_of_charts
 agg_accuracy_tot <- data_static_known_df %>%
-  group_by(chart_type, number_of_charts, test_phase, accuracy) %>%
-  summarize(frequency=n(), accuracy_proportion=n()/40) %>%
-  filter(accuracy == "correct")
+  group_by(chart_type, number_of_charts, accuracy) %>%
+  summarize(frequency=n(), accuracy_proportion=n()/40) 
+agg_accuracy_tot
 
 
 # bar plot accuracy
@@ -130,6 +130,8 @@ ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
        y = "proportion",  
        title = " ") +
   theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
+
+
 
 
 

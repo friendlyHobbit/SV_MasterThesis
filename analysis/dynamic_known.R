@@ -119,9 +119,9 @@ agg_accuracy_ID <- dynamic_known_df %>%
 
 # accuracy per chart_type, number_of_charts
 agg_accuracy_tot <- dynamic_known_df %>%
-  group_by(chart_type, number_of_charts, test_phase, accuracy) %>%
-  summarize(frequency=n(), accuracy_proportion=n()/40) %>%
-  filter(accuracy == "correct")
+  group_by(chart_type, number_of_charts, accuracy) %>%
+  summarize(frequency=n(), accuracy_proportion=n()/40)
+agg_accuracy_tot
 
 
 # bar plot accuracy
