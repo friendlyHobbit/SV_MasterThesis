@@ -121,9 +121,17 @@ agg_accuracy_ID <- dynamic_unknown_df %>%
 
 # accuracy per chart_type, number_of_charts
 agg_accuracy_tot <- dynamic_unknown_df %>%
-  group_by(chart_type, number_of_charts, test_phase, accuracy) %>%
+  group_by(chart_type, number_of_charts, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/40)
 agg_accuracy_tot
+
+
+# check session index. One or more trials likely have a mistake 
+sum_session_index <- dynamic_unknown_df %>%
+  group_by(session_index, number_of_charts, accuracy) %>%
+  summarize(frequency=n(), accuracy_proportion=n()/30) %>%
+  filter(accuracy=="correct")
+sum_session_index
 
 
 # bar plot accuracy
