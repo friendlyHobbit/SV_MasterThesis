@@ -1,0 +1,19 @@
+{
+  "participantId": "975879",
+  "computerUuid": "f98113f4-b9de-45c8-baa8-b693e6df4290",
+  "chartType": "box",
+  "dataSource": "data/data-real.json",
+  "sessionIndex": "53",
+  "testPhase": "performanceB",
+  "sessionType": "identifyUniqueChart",
+  "sessionStartTime": 1729699324711,
+  "sequentialChartAnswers": [],
+  "numberOfCharts": 32,
+  "isDynamic": false,
+  "frames": [],
+  "uniqueChartState": 2,
+  "uniqueChartIndex": 11,
+  "participantAnswerIndex": 31,
+  "participantAnswerState": 4,
+  "clickTime": 1729699325409
+}

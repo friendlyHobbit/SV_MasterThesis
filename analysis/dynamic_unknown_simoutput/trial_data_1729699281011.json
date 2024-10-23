@@ -1,0 +1,206 @@
+{
+  "transitionStarted": true,
+  "frames": [
+    {
+      "frame": 2,
+      "state": [
+        {
+          "state": 1,
+          "q": 49,
+          "m": 55,
+          "b": 25,
+          "h": 94
+        },
+        {
+          "state": 4,
+          "q": 53,
+          "m": 47,
+          "b": 87,
+          "h": 2
+        },
+        {
+          "state": 1,
+          "q": 45,
+          "m": 53,
+          "b": 0,
+          "h": 89
+        },
+        {
+          "state": 4,
+          "q": 77,
+          "m": 48,
+          "b": 78,
+          "h": 11
+        },
+        {
+          "state": 1,
+          "q": 36,
+          "m": 64,
+          "b": 3,
+          "h": 97
+        },
+        {
+          "state": 3,
+          "q": 76,
+          "m": 41,
+          "b": 17,
+          "h": 99
+        },
+        {
+          "state": 3,
+          "q": 75,
+          "m": 49,
+          "b": 24,
+          "h": 97
+        },
+        {
+          "state": 4,
+          "q": 75,
+          "m": 47,
+          "b": 97,
+          "h": 3
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "state": [
+        {
+          "state": 3,
+          "q": 56,
+          "m": 46,
+          "b": 5,
+          "h": 96
+        },
+        {
+          "state": 3,
+          "q": 73,
+          "m": 31,
+          "b": 0,
+          "h": 79
+        },
+        {
+          "state": 1,
+          "q": 24,
+          "m": 61,
+          "b": 22,
+          "h": 83
+        },
+        {
+          "state": 4,
+          "q": 61,
+          "m": 50,
+          "b": 100,
+          "h": 12
+        },
+        {
+          "state": 4,
+          "q": 69,
+          "m": 25,
+          "b": 92,
+          "h": 4
+        },
+        {
+          "state": 1,
+          "q": 49,
+          "m": 77,
+          "b": 19,
+          "h": 98
+        },
+        {
+          "state": 1,
+          "q": 44,
+          "m": 54,
+          "b": 21,
+          "h": 95
+        },
+        {
+          "state": 3,
+          "q": 75,
+          "m": 30,
+          "b": 15,
+          "h": 74
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "state": [
+        {
+          "state": 1,
+          "q": 48,
+          "m": 68,
+          "b": 25,
+          "h": 96
+        },
+        {
+          "state": 4,
+          "q": 77,
+          "m": 41,
+          "b": 93,
+          "h": 17
+        },
+        {
+          "state": 3,
+          "q": 54,
+          "m": 45,
+          "b": 20,
+          "h": 94
+        },
+        {
+          "state": 4,
+          "q": 72,
+          "m": 37,
+          "b": 85,
+          "h": 16
+        },
+        {
+          "state": 3,
+          "q": 52,
+          "m": 33,
+          "b": 5,
+          "h": 96
+        },
+        {
+          "state": 2,
+          "q": 46,
+          "m": 51,
+          "b": 91,
+          "h": 24
+        },
+        {
+          "state": 3,
+          "q": 76,
+          "m": 33,
+          "b": 11,
+          "h": 76
+        },
+        {
+          "state": 4,
+          "q": 55,
+          "m": 43,
+          "b": 95,
+          "h": 16
+        }
+      ]
+    }
+  ],
+  "participantId": "975879",
+  "computerUuid": "f98113f4-b9de-45c8-baa8-b693e6df4290",
+  "chartType": "box",
+  "dataSource": "data/data-real.json",
+  "sessionIndex": "49",
+  "testPhase": "performanceB",
+  "sessionType": "identifyUniqueChart",
+  "transitionAfter": 4,
+  "sessionStartTime": 1729699263315,
+  "sequentialChartAnswers": [],
+  "numberOfCharts": 8,
+  "isDynamic": true,
+  "triggerTime": 1729699279947,
+  "uniqueChartState": 2,
+  "uniqueChartIndex": 5,
+  "participantAnswerIndex": 5,
+  "participantAnswerState": 2,
+  "clickTime": 1729699281009
+}
