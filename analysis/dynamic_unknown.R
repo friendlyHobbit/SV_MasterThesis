@@ -128,8 +128,8 @@ agg_accuracy_tot
 
 # check session index. One or more trials likely have a mistake 
 sum_session_index <- dynamic_unknown_df %>%
-  group_by(session_index, number_of_charts, accuracy) %>%
-  summarize(frequency=n(), accuracy_proportion=n()/30) %>%
+  group_by(session_index,chart_type, number_of_charts, accuracy) %>%
+  summarize(frequency=n(), accuracy_proportion=n()/10) %>%
   filter(accuracy=="correct")
 sum_session_index
 
@@ -203,7 +203,7 @@ rt_outliers
 
 ##### RT - descriptives ####################
 
-# accuracy per chart_type, number_of_charts
+# RT per chart_type, number_of_charts
 agg_RT_tot <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
   summarize(freq=n(),
