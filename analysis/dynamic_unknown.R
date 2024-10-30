@@ -20,6 +20,12 @@ all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
 summary(all_data_df)
 
 
+# import sim data to check results against
+sim_df <- read_csv("sim_results.csv")
+sim_df = subset(sim_df, select = -c(...1) )
+
+
+
 
 ##### Subset dynamic 8, 32, 72 #######################
 
@@ -145,6 +151,9 @@ ggplot(data = dynamic_unknown_df, aes(x = test_phase, fill=accuracy)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
 
 
+##### investigate accuracy ###############
+
+sim_df
 
 
 ##### RT - check and prepare the data #######################
