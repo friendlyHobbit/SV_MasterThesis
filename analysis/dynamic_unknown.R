@@ -13,16 +13,12 @@ library(rstatix)
 ##### Import data ############################
 
 # location of files 
-data_dir <- "C:\\Git\\SV_MasterThesis\\data"
+#data_dir <- "C:\\Git\\SV_MasterThesis\\data"
+data_dir <- "H:\\git\\SV_MasterThesis\\data"
 
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
 summary(all_data_df)
-
-
-# import sim data to check results against
-sim_df <- read_csv("sim_results.csv")
-sim_df = subset(sim_df, select = -c(...1) )
 
 
 
@@ -151,9 +147,30 @@ ggplot(data = dynamic_unknown_df, aes(x = test_phase, fill=accuracy)) +
   theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
 
 
+
+
 ##### investigate accuracy ###############
 
-sim_df
+# import sim data to check results against
+sim_df <- read_csv("sim_results.csv")
+sim_df = subset(sim_df, select = -c(...1) )
+
+sim_df <- na.omit(sim_df)
+sim_df <- sim_df %>% rename(session_index = sessionIndex)
+
+typeof(check_accidental_df$unique_chart_index)
+typeof(check_accidental_df$TrueUniqueChartIndex)
+
+check_accidental_df$TrueUniqueChartIndex <- as.integer(check_accidental_df$TrueUniqueChartIndex)
+
+check_accidental_df <- merge(dynamic_unknown_df, sim_df, by="session_index")
+
+# check if unique_chart_index is the same as trueUniqueChartIndex 
+check_accidental_df$CompareUniqueChartIndex <- ifelse(check_accidental_df$unique_chart_index == check_accidental_df$TrueUniqueChartIndex,
+                                                      TRUE, FALSE)
+
+# check unique chart index
+temp_df <- subset(check_accidental_df, select = c(session_index, unique_chart_index, uniqueChartIndex))
 
 
 ##### RT - check and prepare the data #######################
