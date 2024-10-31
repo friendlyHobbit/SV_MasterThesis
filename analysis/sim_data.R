@@ -10,8 +10,8 @@ library(dplyr)
 ######### import data ###########
 
 # location of files 
-data_dir <- "C:\\Git\\SV_MasterThesis\\analysis\\dynamic_unknown_simoutput"
-#data_dir <- "H:\\git\\SV_MasterThesis\\analysis\\dynamic_unknown_simoutput"
+#data_dir <- "C:\\Git\\SV_MasterThesis\\analysis\\dynamic_unknown_simoutput"
+data_dir <- "H:\\git\\SV_MasterThesis\\analysis\\dynamic_unknown_simoutput"
 
 # get list of files in folder
 files <- list.files(data_dir, full.names = TRUE)
@@ -56,7 +56,7 @@ data_df$TrueUniqueChartIndex <- 0
 
 # loop through data_df
 for(i in rownames(data_df)){
-  temp_states <- data_df[[i, "state"]]
+  temp_states <- data_df[[i, "charts"]]
 
   # is there a unique state?
   states_table <- table(temp_states$state.state)
@@ -80,8 +80,9 @@ for(i in rownames(data_df)){
   }
 }
 
+
 # drop column so it can be exported
-data_df <- subset(data_df, select = -c(state))
+data_df <- subset(data_df, select = -c(charts))
 
 
 ############## Export dataframe #############################

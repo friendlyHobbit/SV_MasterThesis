@@ -1,19 +1,18 @@
 {
-  "frames": [],
-  "participantId": "027112",
-  "computerUuid": "d92cf991-8214-4e69-919b-6aadb6a980a0",
+  "participantId": "550506",
+  "computerUuid": "acc852ee-ae5d-4fcf-86ff-f2356acd6fef",
   "chartType": "box",
   "dataSource": "data/data-real.json",
-  "sessionIndex": "46",
+  "sessionIndex": "44",
   "testPhase": "performanceB",
   "sessionType": "identifyUniqueChart",
-  "sessionStartTime": 1730221502359,
+  "sessionStartTime": 1730380969045,
   "sequentialChartAnswers": [],
   "numberOfCharts": 8,
   "isDynamic": false,
-  "uniqueChartState": 4,
+  "uniqueChartState": 3,
   "uniqueChartIndex": 0,
   "participantAnswerIndex": 6,
-  "participantAnswerState": 1,
-  "clickTime": 1730221503283
+  "participantAnswerState": 2,
+  "clickTime": 1730380969929
 }

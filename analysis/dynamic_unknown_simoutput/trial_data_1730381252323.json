@@ -1,8 +1,659 @@
 {
+  "transitionStarted": true,
   "frames": [
     {
+      "frame": 0,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 64,
+            "m": 50,
+            "b": 24,
+            "h": 84
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 64,
+            "m": 42,
+            "b": 75,
+            "h": 7
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 4,
+            "q": 67,
+            "m": 39,
+            "b": 97,
+            "h": 24
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 4,
+            "q": 59,
+            "m": 37,
+            "b": 91,
+            "h": 8
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 2,
+            "q": 42,
+            "m": 56,
+            "b": 97,
+            "h": 17
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 55,
+            "m": 32,
+            "b": 83,
+            "h": 21
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 4,
+            "q": 59,
+            "m": 33,
+            "b": 93,
+            "h": 25
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 3,
+            "q": 62,
+            "m": 47,
+            "b": 7,
+            "h": 74
+          }
+        },
+        {
+          "index": 8,
+          "state": {
+            "state": 4,
+            "q": 54,
+            "m": 41,
+            "b": 98,
+            "h": 10
+          }
+        },
+        {
+          "index": 9,
+          "state": {
+            "state": 4,
+            "q": 74,
+            "m": 32,
+            "b": 75,
+            "h": 2
+          }
+        },
+        {
+          "index": 10,
+          "state": {
+            "state": 4,
+            "q": 57,
+            "m": 24,
+            "b": 99,
+            "h": 21
+          }
+        },
+        {
+          "index": 11,
+          "state": {
+            "state": 4,
+            "q": 77,
+            "m": 28,
+            "b": 96,
+            "h": 8
+          }
+        },
+        {
+          "index": 12,
+          "state": {
+            "state": 4,
+            "q": 65,
+            "m": 39,
+            "b": 98,
+            "h": 6
+          }
+        },
+        {
+          "index": 13,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 26,
+            "b": 99,
+            "h": 17
+          }
+        },
+        {
+          "index": 14,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 26,
+            "b": 100,
+            "h": 12
+          }
+        },
+        {
+          "index": 15,
+          "state": {
+            "state": 3,
+            "q": 64,
+            "m": 33,
+            "b": 6,
+            "h": 82
+          }
+        },
+        {
+          "index": 16,
+          "state": {
+            "state": 4,
+            "q": 66,
+            "m": 49,
+            "b": 91,
+            "h": 11
+          }
+        },
+        {
+          "index": 17,
+          "state": {
+            "state": 4,
+            "q": 57,
+            "m": 45,
+            "b": 88,
+            "h": 9
+          }
+        },
+        {
+          "index": 18,
+          "state": {
+            "state": 2,
+            "q": 49,
+            "m": 67,
+            "b": 89,
+            "h": 9
+          }
+        },
+        {
+          "index": 19,
+          "state": {
+            "state": 4,
+            "q": 55,
+            "m": 41,
+            "b": 80,
+            "h": 10
+          }
+        },
+        {
+          "index": 20,
+          "state": {
+            "state": 3,
+            "q": 65,
+            "m": 47,
+            "b": 6,
+            "h": 99
+          }
+        },
+        {
+          "index": 21,
+          "state": {
+            "state": 4,
+            "q": 69,
+            "m": 47,
+            "b": 100,
+            "h": 12
+          }
+        },
+        {
+          "index": 22,
+          "state": {
+            "state": 4,
+            "q": 66,
+            "m": 34,
+            "b": 86,
+            "h": 15
+          }
+        },
+        {
+          "index": 23,
+          "state": {
+            "state": 4,
+            "q": 61,
+            "m": 34,
+            "b": 98,
+            "h": 13
+          }
+        },
+        {
+          "index": 24,
+          "state": {
+            "state": 4,
+            "q": 70,
+            "m": 37,
+            "b": 91,
+            "h": 21
+          }
+        },
+        {
+          "index": 25,
+          "state": {
+            "state": 4,
+            "q": 61,
+            "m": 48,
+            "b": 76,
+            "h": 23
+          }
+        },
+        {
+          "index": 26,
+          "state": {
+            "state": 4,
+            "q": 51,
+            "m": 46,
+            "b": 81,
+            "h": 24
+          }
+        },
+        {
+          "index": 27,
+          "state": {
+            "state": 2,
+            "q": 35,
+            "m": 59,
+            "b": 81,
+            "h": 14
+          }
+        },
+        {
+          "index": 28,
+          "state": {
+            "state": 4,
+            "q": 71,
+            "m": 47,
+            "b": 79,
+            "h": 26
+          }
+        },
+        {
+          "index": 29,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 43,
+            "b": 89,
+            "h": 25
+          }
+        },
+        {
+          "index": 30,
+          "state": {
+            "state": 4,
+            "q": 63,
+            "m": 26,
+            "b": 78,
+            "h": 3
+          }
+        },
+        {
+          "index": 31,
+          "state": {
+            "state": 3,
+            "q": 68,
+            "m": 48,
+            "b": 7,
+            "h": 89
+          }
+        }
+      ]
+    },
+    {
+      "frame": 1,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 4,
+            "q": 61,
+            "m": 40,
+            "b": 89,
+            "h": 7
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 2,
+            "q": 45,
+            "m": 60,
+            "b": 87,
+            "h": 2
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 4,
+            "q": 52,
+            "m": 41,
+            "b": 99,
+            "h": 16
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 4,
+            "q": 52,
+            "m": 45,
+            "b": 95,
+            "h": 11
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 2,
+            "q": 41,
+            "m": 54,
+            "b": 91,
+            "h": 12
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 72,
+            "m": 28,
+            "b": 99,
+            "h": 12
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 31,
+            "m": 76,
+            "b": 84,
+            "h": 3
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 50,
+            "b": 80,
+            "h": 14
+          }
+        },
+        {
+          "index": 8,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 24,
+            "b": 88,
+            "h": 6
+          }
+        },
+        {
+          "index": 9,
+          "state": {
+            "state": 2,
+            "q": 33,
+            "m": 76,
+            "b": 84,
+            "h": 7
+          }
+        },
+        {
+          "index": 10,
+          "state": {
+            "state": 2,
+            "q": 43,
+            "m": 57,
+            "b": 78,
+            "h": 2
+          }
+        },
+        {
+          "index": 11,
+          "state": {
+            "state": 2,
+            "q": 48,
+            "m": 60,
+            "b": 95,
+            "h": 9
+          }
+        },
+        {
+          "index": 12,
+          "state": {
+            "state": 2,
+            "q": 28,
+            "m": 70,
+            "b": 92,
+            "h": 15
+          }
+        },
+        {
+          "index": 13,
+          "state": {
+            "state": 2,
+            "q": 46,
+            "m": 65,
+            "b": 94,
+            "h": 17
+          }
+        },
+        {
+          "index": 14,
+          "state": {
+            "state": 3,
+            "q": 56,
+            "m": 43,
+            "b": 19,
+            "h": 100
+          }
+        },
+        {
+          "index": 15,
+          "state": {
+            "state": 3,
+            "q": 67,
+            "m": 40,
+            "b": 2,
+            "h": 99
+          }
+        },
+        {
+          "index": 16,
+          "state": {
+            "state": 2,
+            "q": 44,
+            "m": 76,
+            "b": 93,
+            "h": 8
+          }
+        },
+        {
+          "index": 17,
+          "state": {
+            "state": 4,
+            "q": 66,
+            "m": 35,
+            "b": 79,
+            "h": 5
+          }
+        },
+        {
+          "index": 18,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 45,
+            "b": 95,
+            "h": 6
+          }
+        },
+        {
+          "index": 19,
+          "state": {
+            "state": 3,
+            "q": 71,
+            "m": 40,
+            "b": 21,
+            "h": 92
+          }
+        },
+        {
+          "index": 20,
+          "state": {
+            "state": 2,
+            "q": 50,
+            "m": 51,
+            "b": 77,
+            "h": 23
+          }
+        },
+        {
+          "index": 21,
+          "state": {
+            "state": 2,
+            "q": 35,
+            "m": 52,
+            "b": 99,
+            "h": 22
+          }
+        },
+        {
+          "index": 22,
+          "state": {
+            "state": 2,
+            "q": 25,
+            "m": 58,
+            "b": 94,
+            "h": 23
+          }
+        },
+        {
+          "index": 23,
+          "state": {
+            "state": 2,
+            "q": 26,
+            "m": 63,
+            "b": 98,
+            "h": 7
+          }
+        },
+        {
+          "index": 24,
+          "state": {
+            "state": 3,
+            "q": 76,
+            "m": 49,
+            "b": 13,
+            "h": 79
+          }
+        },
+        {
+          "index": 25,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 46,
+            "b": 87,
+            "h": 5
+          }
+        },
+        {
+          "index": 26,
+          "state": {
+            "state": 3,
+            "q": 67,
+            "m": 37,
+            "b": 12,
+            "h": 91
+          }
+        },
+        {
+          "index": 27,
+          "state": {
+            "state": 2,
+            "q": 28,
+            "m": 56,
+            "b": 94,
+            "h": 7
+          }
+        },
+        {
+          "index": 28,
+          "state": {
+            "state": 3,
+            "q": 61,
+            "m": 28,
+            "b": 10,
+            "h": 92
+          }
+        },
+        {
+          "index": 29,
+          "state": {
+            "state": 3,
+            "q": 65,
+            "m": 35,
+            "b": 20,
+            "h": 92
+          }
+        },
+        {
+          "index": 30,
+          "state": {
+            "state": 2,
+            "q": 38,
+            "m": 58,
+            "b": 77,
+            "h": 3
+          }
+        },
+        {
+          "index": 31,
+          "state": {
+            "state": 3,
+            "q": 75,
+            "m": 47,
+            "b": 0,
+            "h": 75
+          }
+        }
+      ]
+    },
+    {
       "frame": 2,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -327,7 +978,7 @@
     },
     {
       "frame": 3,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -652,7 +1303,7 @@
     },
     {
       "frame": 4,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -977,7 +1628,7 @@
     },
     {
       "frame": 5,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -1302,7 +1953,7 @@
     },
     {
       "frame": 6,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -1627,7 +2278,7 @@
     },
     {
       "frame": 7,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -1952,7 +2603,7 @@
     },
     {
       "frame": 8,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -2277,7 +2928,7 @@
     },
     {
       "frame": 9,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -2602,7 +3253,7 @@
     },
     {
       "frame": 10,
-      "state": [
+      "charts": [
         {
           "index": 0,
           "state": {
@@ -2926,23 +3577,22 @@
       ]
     }
   ],
-  "transitionStarted": true,
-  "participantId": "027112",
-  "computerUuid": "d92cf991-8214-4e69-919b-6aadb6a980a0",
+  "participantId": "550506",
+  "computerUuid": "acc852ee-ae5d-4fcf-86ff-f2356acd6fef",
   "chartType": "box",
   "dataSource": "data/data-real.json",
   "sessionIndex": "55",
   "testPhase": "performanceB",
   "sessionType": "identifyUniqueChart",
   "transitionAfter": 9,
-  "sessionStartTime": 1730221601940,
+  "sessionStartTime": 1730381205333,
   "sequentialChartAnswers": [],
   "numberOfCharts": 32,
   "isDynamic": true,
-  "triggerTime": 1730221647743,
+  "triggerTime": 1730381251571,
   "uniqueChartState": 1,
   "uniqueChartIndex": 5,
-  "participantAnswerIndex": 31,
-  "participantAnswerState": 3,
-  "clickTime": 1730221649033
+  "participantAnswerIndex": 29,
+  "participantAnswerState": 4,
+  "clickTime": 1730381252318
 }

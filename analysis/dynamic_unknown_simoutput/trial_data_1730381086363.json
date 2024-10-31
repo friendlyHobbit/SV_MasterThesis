@@ -1,0 +1,958 @@
+{
+  "transitionStarted": true,
+  "frames": [
+    {
+      "frame": 0,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 4,
+            "q": 52,
+            "m": 32,
+            "b": 82,
+            "h": 15
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 45,
+            "b": 93,
+            "h": 0
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 33,
+            "b": 86,
+            "h": 16
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 3,
+            "q": 76,
+            "m": 48,
+            "b": 6,
+            "h": 78
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 4,
+            "q": 58,
+            "m": 31,
+            "b": 95,
+            "h": 8
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 39,
+            "b": 97,
+            "h": 8
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 37,
+            "m": 55,
+            "b": 85,
+            "h": 0
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 4,
+            "q": 53,
+            "m": 49,
+            "b": 76,
+            "h": 16
+          }
+        }
+      ]
+    },
+    {
+      "frame": 1,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 56,
+            "m": 33,
+            "b": 10,
+            "h": 74
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 35,
+            "b": 79,
+            "h": 7
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 4,
+            "q": 54,
+            "m": 34,
+            "b": 78,
+            "h": 9
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 3,
+            "q": 53,
+            "m": 27,
+            "b": 22,
+            "h": 93
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 3,
+            "q": 68,
+            "m": 24,
+            "b": 5,
+            "h": 96
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 59,
+            "m": 32,
+            "b": 84,
+            "h": 9
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 34,
+            "m": 57,
+            "b": 83,
+            "h": 4
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 2,
+            "q": 30,
+            "m": 69,
+            "b": 79,
+            "h": 4
+          }
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 2,
+            "q": 36,
+            "m": 55,
+            "b": 83,
+            "h": 6
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 2,
+            "q": 26,
+            "m": 75,
+            "b": 94,
+            "h": 4
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 4,
+            "q": 68,
+            "m": 50,
+            "b": 74,
+            "h": 10
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 2,
+            "q": 37,
+            "m": 52,
+            "b": 74,
+            "h": 22
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 4,
+            "q": 71,
+            "m": 27,
+            "b": 85,
+            "h": 19
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 74,
+            "m": 49,
+            "b": 96,
+            "h": 6
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 29,
+            "m": 67,
+            "b": 98,
+            "h": 5
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 3,
+            "q": 75,
+            "m": 26,
+            "b": 5,
+            "h": 100
+          }
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 75,
+            "m": 27,
+            "b": 14,
+            "h": 77
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 3,
+            "q": 71,
+            "m": 27,
+            "b": 25,
+            "h": 97
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 50,
+            "m": 60,
+            "b": 9,
+            "h": 83
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 4,
+            "q": 54,
+            "m": 33,
+            "b": 87,
+            "h": 8
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 3,
+            "q": 52,
+            "m": 39,
+            "b": 23,
+            "h": 92
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 3,
+            "q": 60,
+            "m": 26,
+            "b": 26,
+            "h": 97
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 32,
+            "b": 98,
+            "h": 11
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 4,
+            "q": 53,
+            "m": 49,
+            "b": 76,
+            "h": 16
+          }
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 71,
+            "m": 40,
+            "b": 4,
+            "h": 83
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 45,
+            "b": 93,
+            "h": 0
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 38,
+            "m": 64,
+            "b": 12,
+            "h": 97
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 4,
+            "q": 77,
+            "m": 39,
+            "b": 78,
+            "h": 5
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 2,
+            "q": 40,
+            "m": 54,
+            "b": 100,
+            "h": 1
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 39,
+            "b": 97,
+            "h": 8
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 31,
+            "m": 73,
+            "b": 79,
+            "h": 14
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 2,
+            "q": 30,
+            "m": 69,
+            "b": 79,
+            "h": 4
+          }
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 2,
+            "q": 50,
+            "m": 53,
+            "b": 91,
+            "h": 5
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 35,
+            "b": 79,
+            "h": 7
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 35,
+            "m": 58,
+            "b": 12,
+            "h": 94
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 3,
+            "q": 76,
+            "m": 48,
+            "b": 6,
+            "h": 78
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 2,
+            "q": 49,
+            "m": 66,
+            "b": 77,
+            "h": 4
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 59,
+            "m": 32,
+            "b": 84,
+            "h": 9
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 3,
+            "q": 77,
+            "m": 28,
+            "b": 25,
+            "h": 97
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 3,
+            "q": 75,
+            "m": 26,
+            "b": 5,
+            "h": 100
+          }
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 77,
+            "m": 28,
+            "b": 11,
+            "h": 77
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 2,
+            "q": 26,
+            "m": 75,
+            "b": 94,
+            "h": 4
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 50,
+            "m": 60,
+            "b": 9,
+            "h": 83
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 3,
+            "q": 53,
+            "m": 27,
+            "b": 22,
+            "h": 93
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 4,
+            "q": 58,
+            "m": 31,
+            "b": 95,
+            "h": 8
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 74,
+            "m": 49,
+            "b": 96,
+            "h": 6
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 26,
+            "b": 78,
+            "h": 8
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 4,
+            "q": 53,
+            "m": 49,
+            "b": 76,
+            "h": 16
+          }
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 4,
+            "q": 52,
+            "m": 32,
+            "b": 82,
+            "h": 15
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 3,
+            "q": 71,
+            "m": 27,
+            "b": 25,
+            "h": 97
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 38,
+            "m": 64,
+            "b": 12,
+            "h": 97
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 2,
+            "q": 37,
+            "m": 52,
+            "b": 74,
+            "h": 22
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 3,
+            "q": 68,
+            "m": 24,
+            "b": 5,
+            "h": 96
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 3,
+            "q": 60,
+            "m": 26,
+            "b": 26,
+            "h": 97
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 37,
+            "m": 55,
+            "b": 85,
+            "h": 0
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 2,
+            "q": 30,
+            "m": 69,
+            "b": 79,
+            "h": 4
+          }
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 56,
+            "m": 33,
+            "b": 10,
+            "h": 74
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 45,
+            "b": 93,
+            "h": 0
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 35,
+            "m": 58,
+            "b": 12,
+            "h": 94
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 4,
+            "q": 54,
+            "m": 33,
+            "b": 87,
+            "h": 8
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 4,
+            "q": 71,
+            "m": 27,
+            "b": 85,
+            "h": 19
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 39,
+            "b": 97,
+            "h": 8
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 34,
+            "m": 57,
+            "b": 83,
+            "h": 4
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 3,
+            "q": 75,
+            "m": 26,
+            "b": 5,
+            "h": 100
+          }
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 2,
+            "q": 36,
+            "m": 55,
+            "b": 83,
+            "h": 6
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 4,
+            "q": 76,
+            "m": 35,
+            "b": 79,
+            "h": 7
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 50,
+            "m": 60,
+            "b": 9,
+            "h": 83
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 4,
+            "q": 77,
+            "m": 39,
+            "b": 78,
+            "h": 5
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 3,
+            "q": 52,
+            "m": 39,
+            "b": 23,
+            "h": 92
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 59,
+            "m": 32,
+            "b": 84,
+            "h": 9
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 2,
+            "q": 29,
+            "m": 67,
+            "b": 98,
+            "h": 5
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 4,
+            "q": 53,
+            "m": 49,
+            "b": 76,
+            "h": 16
+          }
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "charts": [
+        {
+          "index": 0,
+          "state": {
+            "state": 3,
+            "q": 75,
+            "m": 27,
+            "b": 14,
+            "h": 77
+          }
+        },
+        {
+          "index": 1,
+          "state": {
+            "state": 2,
+            "q": 26,
+            "m": 75,
+            "b": 94,
+            "h": 4
+          }
+        },
+        {
+          "index": 2,
+          "state": {
+            "state": 1,
+            "q": 38,
+            "m": 64,
+            "b": 12,
+            "h": 97
+          }
+        },
+        {
+          "index": 3,
+          "state": {
+            "state": 3,
+            "q": 76,
+            "m": 48,
+            "b": 6,
+            "h": 78
+          }
+        },
+        {
+          "index": 4,
+          "state": {
+            "state": 2,
+            "q": 40,
+            "m": 54,
+            "b": 100,
+            "h": 1
+          }
+        },
+        {
+          "index": 5,
+          "state": {
+            "state": 4,
+            "q": 74,
+            "m": 49,
+            "b": 96,
+            "h": 6
+          }
+        },
+        {
+          "index": 6,
+          "state": {
+            "state": 4,
+            "q": 73,
+            "m": 32,
+            "b": 98,
+            "h": 11
+          }
+        },
+        {
+          "index": 7,
+          "state": {
+            "state": 2,
+            "q": 30,
+            "m": 69,
+            "b": 79,
+            "h": 4
+          }
+        }
+      ]
+    }
+  ],
+  "participantId": "550506",
+  "computerUuid": "acc852ee-ae5d-4fcf-86ff-f2356acd6fef",
+  "chartType": "box",
+  "dataSource": "data/data-real.json",
+  "sessionIndex": "48",
+  "testPhase": "performanceB",
+  "sessionType": "identifyUniqueChart",
+  "transitionAfter": 3,
+  "sessionStartTime": 1730381038181,
+  "sequentialChartAnswers": [],
+  "numberOfCharts": 8,
+  "isDynamic": true,
+  "triggerTime": 1730381084737,
+  "uniqueChartState": 1,
+  "uniqueChartIndex": 2,
+  "participantAnswerIndex": 7,
+  "participantAnswerState": 2,
+  "clickTime": 1730381086360
+}

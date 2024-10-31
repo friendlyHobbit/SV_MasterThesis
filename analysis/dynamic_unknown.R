@@ -158,19 +158,35 @@ sim_df = subset(sim_df, select = -c(...1) )
 sim_df <- na.omit(sim_df)
 sim_df <- sim_df %>% rename(session_index = sessionIndex)
 
-typeof(check_accidental_df$unique_chart_index)
-typeof(check_accidental_df$TrueUniqueChartIndex)
+typeof(dynamic_unknown_df$session_index)
+typeof(sim_df$session_index)
 
-check_accidental_df$TrueUniqueChartIndex <- as.integer(check_accidental_df$TrueUniqueChartIndex)
-
+# merge dfs
 check_accidental_df <- merge(dynamic_unknown_df, sim_df, by="session_index")
 
-# check if unique_chart_index is the same as trueUniqueChartIndex 
-check_accidental_df$CompareUniqueChartIndex <- ifelse(check_accidental_df$unique_chart_index == check_accidental_df$TrueUniqueChartIndex,
+# seperate TrueUniqueState and TrueUniqueChartIndex
+check_accidental_df$TrueUniqueChartIndex1 <- sapply(strsplit(check_accidental_df$TrueUniqueChartIndex, ","), "[", 1)
+check_accidental_df$TrueUniqueChartIndex1 <- as.integer(check_accidental_df$TrueUniqueChartIndex1)
+check_accidental_df$TrueUniqueChartIndex2 <- sapply(strsplit(check_accidental_df$TrueUniqueChartIndex, ","), "[", 2) 
+check_accidental_df$TrueUniqueChartIndex2 <- as.integer(check_accidental_df$TrueUniqueChartIndex2)
+check_accidental_df$TrueUniqueChartIndex2 <- ifelse(is.na(check_accidental_df$TrueUniqueChartIndex2), 999,
+                                                    check_accidental_df$TrueUniqueChartIndex2)
+
+check_accidental_df$TrueUniqueState1 <- sapply(strsplit(check_accidental_df$TrueUniqueState, ","), "[", 1)
+check_accidental_df$TrueUniqueState1 <- as.integer(check_accidental_df$TrueUniqueState1)
+check_accidental_df$TrueUniqueState2 <- sapply(strsplit(check_accidental_df$TrueUniqueState, ","), "[", 2)
+check_accidental_df$TrueUniqueState2 <- as.integer(check_accidental_df$TrueUniqueState2)
+check_accidental_df$TrueUniqueState3 <- sapply(strsplit(check_accidental_df$TrueUniqueState, ","), "[", 3)
+check_accidental_df$TrueUniqueState3 <- as.integer(check_accidental_df$TrueUniqueState3)
+
+
+# check if unique_chart_index is the same as trueUniqueChartIndex1 or 2  
+check_accidental_df$CompareUniqueChartIndex <- ifelse((check_accidental_df$unique_chart_index == check_accidental_df$TrueUniqueChartIndex1) | (check_accidental_df$unique_chart_index == check_accidental_df$TrueUniqueChartIndex2),
                                                       TRUE, FALSE)
 
 # check unique chart index
 temp_df <- subset(check_accidental_df, select = c(session_index, unique_chart_index, uniqueChartIndex))
+temp_df %>% distinct()
 
 
 ##### RT - check and prepare the data #######################
