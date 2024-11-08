@@ -32,30 +32,79 @@ for(f in files){
 df1_performanceB <- df_1$performanceB
 df2_performanceB <- df_2$performanceB
 df3_performanceB <- df_3$performanceB
+df4_performanceB <- df_4$performanceB
+df5_performanceB <- df_5$performanceB
 
 # only take dynamic and remove infopages
-df1_performanceB <- subset(df1_performanceB, df1_performanceB$sessionType!="infoPage" & df1_performanceB$isDynamic==TRUE)
-df2_performanceB <- subset(df1_performanceB, df2_performanceB$sessionType!="infoPage" & df2_performanceB$isDynamic==TRUE)
-df3_performanceB <- subset(df3_performanceB, df3_performanceB$sessionType!="infoPage" & df3_performanceB$isDynamic==TRUE)
+df1_performanceB <- subset(df1_performanceB, df1_performanceB$sessionType!="infoPage")
+#df1_performanceB <- df1_performanceB %>% unnest(sessionData)
+df2_performanceB <- subset(df2_performanceB, df2_performanceB$sessionType!="infoPage")
+#df2_performanceB <- df3_performanceB %>% unnest(sessionData)
+df3_performanceB <- subset(df3_performanceB, df3_performanceB$sessionType!="infoPage")
+#df3_performanceB <- df3_performanceB %>% unnest(sessionData)
+df4_performanceB <- subset(df4_performanceB, df4_performanceB$sessionType!="infoPage")
+df5_performanceB <- subset(df5_performanceB, df5_performanceB$sessionType!="infoPage")
 
-temp <- df1_performanceB$sessionData
 
-temp <- df1_performanceB %>% unnest(sessionData)
 
-temp <- temp %>% unnest(sessionData)
+###### import participant data ################
 
-summary(temp$sessionData)
+# location of files 
+participant_data_dir <- "C:\\Git\\SV_MasterThesis\\data"
 
-# remove sessionData that has class data.frame 
-rows_to_keep <- NA
-for(i in temp$sessionData){
-  list_length <- length(i)
-  keep_row<-NA
-  # if length is longer than 2, remove row
-  ifelse(list_length == 2, keep_row<-TRUE, keep_row<-FALSE )
-  rows_to_keep <- append(rows_to_keep, keep_row)
-}
+participant_df <- read_csv(file.path(participant_data_dir, "results_8_32_72.csv"))
+summary(participant_df)
 
+# only take performanceB
+participant_df <- subset(participant_df, test_phase=="performanceB")
+
+unique_indexes <- unique(participant_df$session_index)
+summary(unique_indexes)
+
+
+
+###### Compare DFs #################
+
+# take session index, uniqueChartState, uniqueChartIndex
+participant_df2 <- subset(participant_df, select = c(session_index, unique_chart_index, unique_chart_state))
+participant_df2 <- participant_df2 %>% 
+  rename("sessionIndex" = "session_index",
+         "uniqueChartIndex_participants" = "unique_chart_index",
+         "uniqueChartState_participants" = "unique_chart_state")
+
+df4_performanceB2 <- subset(df4_performanceB, select = c(sessionIndex, uniqueChartIndex, uniqueChartState))
+df4_performanceB2 <- df4_performanceB2 %>% 
+  rename("uniqueChartIndex_df1" = "uniqueChartIndex",
+         "uniqueChartState_df1" = "uniqueChartState")
+
+df5_performanceB2 <- subset(df5_performanceB, select = c(sessionIndex, uniqueChartIndex, uniqueChartState))
+df5_performanceB2 <- df5_performanceB2 %>% 
+  rename("uniqueChartIndex_df2" = "uniqueChartIndex",
+         "uniqueChartState_df2" = "uniqueChartState")
+
+
+
+min(df4_performanceB2$sessionIndex)
+max(df4_performanceB2$sessionIndex)
+
+min(df5_performanceB2$sessionIndex)
+max(df5_performanceB2$sessionIndex)
+
+
+
+
+# create sessionIndex 19 to 81 in all DF
+df2_performanceB2 <- df2_performanceB2 %>% add_row(sessionIndex = 19:57)
+df1_performanceB2 <- df1_performanceB2 %>% add_row(sessionIndex = 19)
+df1_performanceB2 <- df1_performanceB2 %>% add_row(sessionIndex = 28:81)
+df3_performanceB2 <- df3_performanceB2 %>% add_row(sessionIndex = 19:42)
+df3_performanceB2 <- df3_performanceB2 %>% add_row(sessionIndex = 59:81)
+participant_df2 <- participant_df2 %>% add_row(sessionIndex = 59:81)
+
+# merge by session index
+total1 <- merge(participant_df2, df4_performanceB2, by="sessionIndex")
+total <- merge(total1, df5_performanceB2, by="sessionIndex") 
+total <- total[!duplicated(total$sessionIndex), ]
 
 
 
