@@ -8,6 +8,7 @@ library(stringr)
 library(gridExtra)
 library(rstatix)
 library(jsonlite)
+library(purrr)
 
 
 ##### Import data ############################
@@ -38,6 +39,23 @@ df2_performanceB <- subset(df1_performanceB, df2_performanceB$sessionType!="info
 df3_performanceB <- subset(df3_performanceB, df3_performanceB$sessionType!="infoPage" & df3_performanceB$isDynamic==TRUE)
 
 temp <- df1_performanceB$sessionData
+
+temp <- df1_performanceB %>% unnest(sessionData)
+
+temp <- temp %>% unnest(sessionData)
+
+summary(temp$sessionData)
+
+# remove sessionData that has class data.frame 
+rows_to_keep <- NA
+for(i in temp$sessionData){
+  list_length <- length(i)
+  keep_row<-NA
+  # if length is longer than 2, remove row
+  ifelse(list_length == 2, keep_row<-TRUE, keep_row<-FALSE )
+  rows_to_keep <- append(rows_to_keep, keep_row)
+}
+
 
 
 
