@@ -77,16 +77,18 @@ check_ID_df <- data_static_known_df %>%
   group_by(participant_id) %>%
   summarise(frequency=n())
 
+
 # get participant with freq less than 12
 participant_id <- check_ID_df$participant_id[check_ID_df$frequency < 12 ]
+
 
 # get missing chart_type and number (frequency less than 40)
 chart_type <- RTperCondition_df$chart_type[RTperCondition_df$frequency < 40]
 number_of_charts <- RTperCondition_df$number_of_charts[RTperCondition_df$frequency < 40]
 
 
-# impute median of missing condition
-RT_static <- RTperCondition_df$rt_median[RTperCondition_df$frequency < 40]
+# add missing
+RT_static <- NA
 
 # create new temp df
 column_names <- colnames(data_static_known_df)
@@ -100,8 +102,10 @@ temp_df$RT_static <- c(RT_static, RT_static, RT_static, RT_static)
 temp_df$test_phase <- c("state known", "state known", "state known", "state known")
 
 
-# add missing data into data_static_known_df
+# add missing data back into df
 data_static_known_df <- rbind(data_static_known_df, temp_df)
+
+
 
 
 
@@ -124,12 +128,13 @@ agg_accuracy_tot
 # bar plot accuracy
 ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
   geom_bar(position = 'fill') +
-  facet_grid(number_of_charts ~ chart_type) +
-  labs(x = "Test phase",  
+  facet_grid(chart_type ~ number_of_charts) +
+  labs(x = "",  
        fill = "Accuracy",  
        y = "proportion",  
        title = " ") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
+  theme(axis.text.x=element_blank(), 
+        axis.ticks.x=element_blank())
 
 
 
@@ -139,7 +144,7 @@ ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
 ##### RT - prepare and check the data ####################
 
 # only take accurate cases
-#data_static_known_df <- data_static_known_df[data_static_known_df$accuracy=="correct",]
+data_static_known_df <- data_static_known_df[data_static_known_df$accuracy=="correct",]
 
 
 # one RT value per person per display and N_charts
@@ -147,6 +152,8 @@ ggplot(data = data_static_known_df, aes(x = test_phase, fill=accuracy)) +
 agg_RT_ID <- data_static_known_df %>%
   group_by(participant_id, chart_type, number_of_charts) %>%
   summarize(freq=n(), rt_median=median(RT_static), rt_mean=mean(RT_static))
+# remove empty row
+agg_RT_ID <- agg_RT_ID[complete.cases(agg_RT_ID), ]
 
 # check number of data points per participant
 agg_agg_RT_ID <- agg_RT_ID %>%
@@ -154,12 +161,9 @@ agg_agg_RT_ID <- agg_RT_ID %>%
   summarize(freq=n())
 
 
-
 # try transformations
 agg_RT_ID$rt_mean_log <- log(agg_RT_ID$rt_mean)
 agg_RT_ID$rt_mean_dev <- (1/agg_RT_ID$rt_mean)
-
-
 
 # test normality 
 shapiro_results <- agg_RT_ID %>%
@@ -186,7 +190,7 @@ rt_outliers <- agg_RT_ID %>%
   identify_outliers(rt_mean_log)
 rt_outliers
 
-
+## Use rt_mean_log: has no extreme outliers and is most normal
 
 
 ############# RT descriptives ####################
@@ -213,10 +217,10 @@ CL_RT_static <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=cha
   geom_line(position = position_dodge(0.4)) +
   geom_point(position = position_dodge(0.4)) +
   labs(
-    title = "Static Known",
-    x = "Number of displays",
+    title = "",
+    x = "Number of Displays",
     y = "Mean RT in msec",
-    colour = "Display"
+    colour = "Display Type"
   )
 CL_RT_static
 
@@ -278,7 +282,11 @@ one.way
 pwc <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   pairwise_t_test(
-    rt_mean_log ~ chart_type, paired = TRUE,
+    rt_mean_log ~ chart_type,
     p.adjust.method = "BH"
   )
 pwc
+
+
+
+

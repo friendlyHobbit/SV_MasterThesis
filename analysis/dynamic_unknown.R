@@ -94,7 +94,7 @@ number_of_charts <- RTperCondition_df$number_of_charts[RTperCondition_df$frequen
 
 
 # impute median of missing condition
-RT_dynamic <- RTperCondition_df$rt_median[RTperCondition_df$frequency < 40]
+RT_dynamic <- NA
 
 # create new temp df
 column_names <- colnames(dynamic_unknown_df)
@@ -139,64 +139,30 @@ sum_session_index
 # bar plot accuracy
 ggplot(data = dynamic_unknown_df, aes(x = test_phase, fill=accuracy)) +
   geom_bar(position = 'fill') +
-  facet_grid(number_of_charts ~ chart_type) +
-  labs(x = "Test phase",  
+  facet_grid(chart_type ~ number_of_charts) +
+  labs(x = " ",  
        fill = "Accuracy",  
        y = "proportion",  
        title = " ") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1))
+  theme(axis.text.x=element_blank(), 
+        axis.ticks.x=element_blank())
 
 
 
-
-##### investigate accuracy ###############
-
-# import sim data to check results against
-sim_df <- read_csv("sim_results.csv")
-sim_df = subset(sim_df, select = -c(...1) )
-
-sim_df <- na.omit(sim_df)
-sim_df <- sim_df %>% rename(session_index = sessionIndex)
-
-typeof(dynamic_unknown_df$session_index)
-typeof(sim_df$session_index)
-
-# merge dfs
-check_accidental_df <- merge(dynamic_unknown_df, sim_df, by="session_index")
-
-# seperate TrueUniqueState and TrueUniqueChartIndex
-check_accidental_df$TrueUniqueChartIndex1 <- sapply(strsplit(check_accidental_df$TrueUniqueChartIndex, ","), "[", 1)
-check_accidental_df$TrueUniqueChartIndex1 <- as.integer(check_accidental_df$TrueUniqueChartIndex1)
-check_accidental_df$TrueUniqueChartIndex2 <- sapply(strsplit(check_accidental_df$TrueUniqueChartIndex, ","), "[", 2) 
-check_accidental_df$TrueUniqueChartIndex2 <- as.integer(check_accidental_df$TrueUniqueChartIndex2)
-check_accidental_df$TrueUniqueChartIndex2 <- ifelse(is.na(check_accidental_df$TrueUniqueChartIndex2), 999,
-                                                    check_accidental_df$TrueUniqueChartIndex2)
-
-check_accidental_df$TrueUniqueState1 <- sapply(strsplit(check_accidental_df$TrueUniqueState, ","), "[", 1)
-check_accidental_df$TrueUniqueState1 <- as.integer(check_accidental_df$TrueUniqueState1)
-check_accidental_df$TrueUniqueState2 <- sapply(strsplit(check_accidental_df$TrueUniqueState, ","), "[", 2)
-check_accidental_df$TrueUniqueState2 <- as.integer(check_accidental_df$TrueUniqueState2)
-check_accidental_df$TrueUniqueState3 <- sapply(strsplit(check_accidental_df$TrueUniqueState, ","), "[", 3)
-check_accidental_df$TrueUniqueState3 <- as.integer(check_accidental_df$TrueUniqueState3)
-
-
-# check if unique_chart_index is the same as trueUniqueChartIndex1 or 2  
-check_accidental_df$CompareUniqueChartIndex <- ifelse((check_accidental_df$unique_chart_index == check_accidental_df$TrueUniqueChartIndex1) | (check_accidental_df$unique_chart_index == check_accidental_df$TrueUniqueChartIndex2),
-                                                      TRUE, FALSE)
-
-# check unique chart index
-temp_df <- subset(check_accidental_df, select = c(session_index, unique_chart_index, uniqueChartIndex))
-temp_df %>% distinct()
 
 
 ##### RT - check and prepare the data #######################
 
+# only take accurate cases
+dynamic_unknown_df <- dynamic_unknown_df[dynamic_unknown_df$accuracy=="correct",]
 
 # one RT value per person per display and N_charts
 # aggregate per person, per display type, per number_charts
 agg_RT_ID <- dynamic_unknown_df %>%
   group_by(participant_id, chart_type, number_of_charts) %>%
   summarize(freq=n(), rt_median=median(RT_dynamic), rt_mean=mean(RT_dynamic))
+# remove empty row
+agg_RT_ID <- agg_RT_ID[complete.cases(agg_RT_ID), ]
 
 # check number of data points per participant
 agg_agg_RT_ID <- agg_RT_ID %>%
@@ -207,8 +173,6 @@ agg_agg_RT_ID <- agg_RT_ID %>%
 # try transformations
 agg_RT_ID$rt_mean_log <- log(agg_RT_ID$rt_mean)
 agg_RT_ID$rt_mean_dev <- (1/agg_RT_ID$rt_mean)
-agg_RT_ID$rt_median_log <- log(agg_RT_ID$rt_median)
-agg_RT_ID$rt_median_dev <- (1/agg_RT_ID$rt_median)
 
 
 # test normality log
@@ -217,16 +181,13 @@ shapiro_results <- agg_RT_ID %>%
   summarize(
     Shapiro_Wilk_p_value = shapiro.test(rt_mean)$p.value,
     Shapiro_Wilk_p_value_log = shapiro.test(rt_mean_log)$p.value,
-    Shapiro_Wilk_p_value_dev = shapiro.test(rt_mean_dev)$p.value,
-    Shapiro_Wilk_p_value_median = shapiro.test(rt_median)$p.value,
-    Shapiro_Wilk_p_value_median_log = shapiro.test(rt_median_log)$p.value,
-    Shapiro_Wilk_p_value_median_dev = shapiro.test(rt_median_dev)$p.value
+    Shapiro_Wilk_p_value_dev = shapiro.test(rt_mean_dev)$p.value
   )
 print(shapiro_results)
 
 
 # distributions 
-density_plots <- ggplot(agg_RT_ID, aes(x = rt_mean_log)) +
+density_plots <- ggplot(agg_RT_ID, aes(x = rt_mean_dev)) +
   geom_density(fill = "blue", alpha = 0.5) +  
   facet_grid(chart_type ~ number_of_charts , scales = "free_x") +
   labs(x = "RT_static_log", y = "Density") + 
@@ -237,9 +198,30 @@ print(density_plots)
 # check outliers
 rt_outliers <- agg_RT_ID %>%
   group_by(chart_type, number_of_charts) %>%
-  identify_outliers(rt_mean_log)
+  identify_outliers(rt_mean_dev)
 rt_outliers
 
+## use rt_mean_dev. Most normal, few outliers
+
+
+
+# check number of cases per conditions
+agg_check_observations <- agg_RT_ID %>%
+  group_by(number_of_charts, chart_type) %>%
+  summarize(freq=n())
+agg_check_observations
+
+agg_RT_ID <- ungroup(agg_RT_ID)
+
+agg_RT_ID <- agg_RT_ID %>%
+  mutate(
+    number_of_charts = factor(number_of_charts),
+    chart_type = factor(chart_type)
+  )
+
+# Check if the dataset is balanced
+table(agg_RT_ID$number_of_charts, agg_RT_ID$chart_type)
+sum(is.na(agg_RT_ID))
 
 
 
@@ -266,9 +248,9 @@ CL_plot <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=chart_ty
   geom_line(position = position_dodge(0.4)) +
   geom_point(position = position_dodge(0.4)) +
   labs(
-    x = "Number of Charts",
+    x = "Number of Displays",
     y = "Mean RT in msec",
-    colour = "Chart Type"
+    colour = "Display Type"
   )
 CL_plot
 
@@ -278,31 +260,12 @@ CL_plot
 
 summary(agg_RT_ID)
 
-# check number of cases per conditions
-agg_check_observations <- agg_RT_ID %>%
-  group_by(number_of_charts, chart_type) %>%
-  summarize(freq=n())
-agg_check_observations
-
-agg_RT_ID <- ungroup(agg_RT_ID)
-
-agg_RT_ID <- agg_RT_ID %>%
-  mutate(
-    number_of_charts = factor(number_of_charts),
-    chart_type = factor(chart_type)
-  )
-
-# Check if the dataset is balanced
-table(agg_RT_ID$number_of_charts, agg_RT_ID$chart_type)
-sum(is.na(agg_RT_ID))
-
-
 
 # ANOVA 
 
 # two-way repeated measures anova
 res.aov <- anova_test(data = agg_RT_ID, 
-                      dv = rt_mean_log, 
+                      dv = rt_mean_dev, 
                       wid = participant_id, 
                       within = number_of_charts,
                       between = chart_type)
@@ -312,7 +275,7 @@ get_anova_table(res.aov)
 # Effect of number_of_charts at each chart_type
 one.way <- agg_RT_ID %>%
   group_by(chart_type) %>%
-  anova_test(dv = rt_mean_log, wid = participant_id, within = number_of_charts) %>%
+  anova_test(dv = rt_mean_dev, wid = participant_id, within = number_of_charts) %>%
   get_anova_table() %>%
   adjust_pvalue(method = "BH")
 one.way
@@ -320,7 +283,7 @@ one.way
 # Effect of chart_type at each number_of_charts
 one.way <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
-  anova_test(dv = rt_mean_log, wid = participant_id, between = chart_type) %>%
+  anova_test(dv = rt_mean_dev, wid = participant_id, between = chart_type) %>%
   get_anova_table() %>%
   adjust_pvalue(method = "BH")
 one.way
@@ -330,8 +293,8 @@ one.way
 pwc <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   pairwise_t_test(
-    rt_mean_log ~ chart_type, paired = TRUE,
-    p.adjust.method = "bonferroni"
+    rt_mean_dev ~ chart_type,
+    p.adjust.method = "BH"
   )
 pwc
 
