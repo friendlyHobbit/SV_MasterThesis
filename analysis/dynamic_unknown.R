@@ -280,6 +280,8 @@ one.way <- agg_RT_ID %>%
   adjust_pvalue(method = "BH")
 one.way
 
+agg_RT_ID$rt_mean_dev <- agg_RT_ID$rt_mean_dev*1e6
+
 # Effect of chart_type at each number_of_charts
 one.way <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
@@ -287,7 +289,6 @@ one.way <- agg_RT_ID %>%
   get_anova_table() %>%
   adjust_pvalue(method = "BH")
 one.way
-
 
 # pairwise 
 pwc <- agg_RT_ID %>%
