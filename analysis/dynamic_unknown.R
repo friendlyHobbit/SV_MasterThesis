@@ -26,7 +26,8 @@ summary(all_data_df)
 ##### Subset dynamic 8, 32, 72 #######################
 
 dynamic_unknown_df <- all_data_df[all_data_df$is_dynamic == TRUE &
-                                  all_data_df$test_phase == "performanceB" ,] 
+                                  all_data_df$test_phase == "performanceB" &
+                                  all_data_df$number_of_charts!=8,] 
 
 # remove empty rows
 dynamic_unknown_df <- dynamic_unknown_df[rowSums(is.na(dynamic_unknown_df)) != ncol(dynamic_unknown_df), ]
@@ -79,22 +80,18 @@ check_ID_df <- dynamic_unknown_df %>%
   group_by(participant_id) %>%
   summarise(frequency=n())
 
-# get mean and median for each condition
-RTperCondition_df <- dynamic_unknown_df %>%
+perCondition_df <- dynamic_unknown_df %>%
   group_by(chart_type, number_of_charts) %>%
-  summarise(frequency=n(), rt_median=median(RT_dynamic), rt_mean=mean(RT_dynamic))
+  summarise(frequency=n())
 
 
 # get participant with freq less than 12
-participant_id <- check_ID_df$participant_id[check_ID_df$frequency < 12 ]
+participant_id <- check_ID_df$participant_id[check_ID_df$frequency < 8 ]
 
 # get missing chart_type and number (frequency less than 40)
-chart_type <- RTperCondition_df$chart_type[RTperCondition_df$frequency < 40]
-number_of_charts <- RTperCondition_df$number_of_charts[RTperCondition_df$frequency < 40]
+chart_type <- perCondition_df$chart_type[perCondition_df$frequency < 40]
+number_of_charts <- perCondition_df$number_of_charts[perCondition_df$frequency < 40]
 
-
-# impute median of missing condition
-RT_dynamic <- NA
 
 # create new temp df
 column_names <- colnames(dynamic_unknown_df)
@@ -104,13 +101,13 @@ colnames(temp_df) <- column_names
 temp_df$participant_id <- c(participant_id, participant_id, participant_id, participant_id)
 temp_df$chart_type <- c(chart_type, chart_type, chart_type, chart_type)
 temp_df$number_of_charts <- c(number_of_charts, number_of_charts, number_of_charts, number_of_charts)
-temp_df$RT_dynamic <- c(RT_dynamic, RT_dynamic, RT_dynamic, RT_dynamic)
+temp_df$RT_dynamic <- c(NA, NA, NA, NA)
 temp_df$test_phase <- c("state unknown", "state unknown", "state unknown", "state unknown")
 
 
 # add missing data back into df
 dynamic_unknown_df <- rbind(dynamic_unknown_df, temp_df)
-
+summary(dynamic_unknown_df$RT_dynamic)
 
 
 
@@ -170,6 +167,7 @@ agg_agg_RT_ID <- agg_RT_ID %>%
   summarize(freq=n())
 
 
+
 # try transformations
 agg_RT_ID$rt_mean_log <- log(agg_RT_ID$rt_mean)
 agg_RT_ID$rt_mean_dev <- (1/agg_RT_ID$rt_mean)
@@ -201,8 +199,7 @@ rt_outliers <- agg_RT_ID %>%
   identify_outliers(rt_mean_dev)
 rt_outliers
 
-## use rt_mean_dev. Most normal, few outliers
-
+## use rt_mean_dev. Most normal, no extreme outliers
 
 
 # check number of cases per conditions
