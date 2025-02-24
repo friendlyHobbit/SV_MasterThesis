@@ -281,9 +281,10 @@ one.way
 # pairwise 
 pwc <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
-  pairwise_t_test(
+  t_test(
     rt_mean_dev ~ chart_type, 
-    p.adjust.method = "bonferroni"
+    p.adjust.method = "bonferroni",
+    detailed = TRUE
   )
 pwc
 

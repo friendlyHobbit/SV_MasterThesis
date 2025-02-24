@@ -239,7 +239,7 @@ agg_RT_tot <- agg_RT_ID %>%
   )
 
 
-# confidence interfall plot
+# confidence interval plot
 CL_plot <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=chart_type, group = chart_type)) + 
   geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), width=.3, position = position_dodge(0.4)) +
   geom_line(position = position_dodge(0.4)) +
@@ -274,7 +274,7 @@ one.way <- agg_RT_ID %>%
   group_by(chart_type) %>%
   anova_test(dv = rt_mean_dev, wid = participant_id, within = number_of_charts) %>%
   get_anova_table() %>%
-  adjust_pvalue(method = "BH")
+  adjust_pvalue(method = "bonferroni")
 one.way
 
 agg_RT_ID$rt_mean_dev <- agg_RT_ID$rt_mean_dev*1e6
@@ -284,15 +284,16 @@ one.way <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
   anova_test(dv = rt_mean_dev, wid = participant_id, between = chart_type) %>%
   get_anova_table() %>%
-  adjust_pvalue(method = "BH")
+  adjust_pvalue(method = "bonferroni")
 one.way
 
 # pairwise 
 pwc <- agg_RT_ID %>%
   group_by(number_of_charts) %>%
-  pairwise_t_test(
+  t_test(
     rt_mean_dev ~ chart_type,
-    p.adjust.method = "BH"
+    detailed = TRUE,
+    p.adjust.method = "bonferroni"
   )
 pwc
 
