@@ -1,0 +1,197 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+body {
+    background-color: #000;
+    color: white;
+    width:100%;
+    min-height: 100%;
+    padding-bottom: 50px;
+    margin: 0;
+    font-size: 1.2em;
+    font-family: sans-serif;
+    overflow-x: hidden;
+}
+
+a {
+    color: white;
+}
+.main h1 {
+    text-align: center;
+}
+.main button {
+    background: #00f;
+    border: none;
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 1.3em;
+    border-radius: 5px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+}
+button {
+    cursor: pointer;
+}
+.info {
+    width: 1000px;
+    margin: 0 auto;
+}
+.chart {
+    border: 0;
+    margin: 20px auto 30px;
+    display: block;
+}
+
+.strategies p {
+    margin: 0 0 4px;
+}
+
+.outliner {
+    display: none;
+    stroke: white;
+    stroke-width: 3px;
+}
+
+.bar {
+    fill: white;
+}
+
+
+.axis {
+    fill: #777;
+    font: 8px sans-serif;
+}
+
+.axis text {
+    fill: #777;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #777;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.continue-prompt {
+    position: fixed;
+    bottom: 0;
+    background: blue;
+    color: white;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    left: 0;
+    right: 0;
+    font-size: 1.3em;
+}
+
+.continue-progress-bar-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+}
+.continue-progress-bar {
+    background: blue;
+    height: 50px;
+    width: 0;
+}
+.session-instructions {
+    text-align: center;
+    font-size: 1.0em;
+    margin-bottom: -0.6em;
+    height: 1.3em;
+    font-weight: 400;
+}
+.example-image {
+    width: 600px;
+}
+.example-image-captions span {
+    display: inline-block;
+}
+.example-image-captions.barchart span {
+    margin: 0 46px;
+}
+.example-image-captions.boxchart span {
+    margin: 0 43px;
+}
+.example-image-captions.ibqchart span {
+    margin: 0 43px;
+}
+.example-image-captions.ibcchart span {
+    margin: 0 43px;
+}
+.example-image-captions.eidchart span {
+    margin: 0 42px;
+}
+
+.unique-chart-example-image {
+    width: 600px;
+}
+
+.debug-bar {
+    height: 30px;
+    margin-bottom: -20px;
+    text-align: center;
+}
+
+.chart-type-selector,
+.session-selector {
+    font-size: 1em;
+}
+
+/* Outlines */
+
+.outline,
+.overlay {
+    display: none;
+}
+
+.outline {
+    stroke-width: 3px;
+    stroke: white;
+    fill: none;
+}
+
+.overlay {
+    fill: #BBB;
+    cursor: pointer;
+}
+
+.overlay:hover {
+    fill: white;
+}
+
+svg {
+    position: absolute;
+}
+
+.charts-8 svg {
+    left: 34.5%;
+}
+
+.charts-32 svg {
+    left: 17.5%;
+}
+
+.charts-72 svg {
+    left: 2%;
+}
