@@ -11,8 +11,8 @@ library(rstatix)
 
 ##### Import data ############################
 
-# location of files 
-data_dir <- "H:\\Git\\SV_MasterThesis\\data"
+# location of files - add data file path here
+data_dir <- ""
 
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))

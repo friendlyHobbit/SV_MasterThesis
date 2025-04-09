@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBQ Chart Visualization</title>
+
+    <script type="text/javascript" src="javascript/d3.v3.min.js"></script>
+    <script type="text/javascript" src="javascript/d3-timer.v1.min.js"></script>
+    <script type="text/javascript" src="javascript/d3-selection-multi.min.js"></script>
+    
+    <script src="javascript/ibqchart.js"></script>
+    
+    <link rel="stylesheet" href="stylesheets/application.css">
+</head>
+
+<body>
+    <h1>IBQ Chart Visualization</h1>
+    <svg width="500" height="500"></svg>
+
+    <script>
+        // Ensure D3 and ibqchart.js are properly loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            window.svg = d3.select("svg"); // Create SVG element
+
+            // Example sessionData, replace with actual data
+            window.sessionData = [
+                { state: 2, b: 30, m: 40, q: 20, h: 15 },
+                { state: 4, b: 50, m: 30, q: 10, h: 25 }
+            ];
+
+            window.dynamicChartsIntervalDuration = 1000; // Example duration
+
+            _draw(true); // Call your function to draw the chart
+        });
+    </script>
+</body>
+</html>
