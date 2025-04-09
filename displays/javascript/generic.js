@@ -1,7 +1,6 @@
 /*****
  DATA
 *****/
-let dataForDb = {}; // JSON payload of all trackable data which will be sent to the server for saving.
 let dataSource; // Relative path to the JSON data source.
 let data; // Data asynchronously retrieved from the dataSource.
 let sessionObject; // Data for this particular session (page) extracted from data, corresponding to the current sessionIndex.
@@ -83,7 +82,7 @@ if (localStorage.computerUuid === undefined) {
 let sessionComplete = false;
 
 if (sessionStorage.sessionIndex === undefined) {
-    sessionStorage.sessionIndex = 0;
+    sessionStorage.sessionIndex = 10;
 }
 
 function getSessionObject() {
@@ -117,22 +116,6 @@ function endSession() {
             selection.transition().duration(0);
         });
     }
-
-    console.log('Recording answer:', dataForDb);
-
-    $.ajax({
-        type: 'post',
-        url: '/answers',
-        data: dataForDb,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-        },
-        success: function () {
-            incrementSessionIndex();
-            sessionComplete = true;
-            showContinuePrompt();
-        }
-    });
 }
 
 /*******
@@ -171,44 +154,7 @@ function interpolColor(variable, maxSize){
 **********/
 let userReady = false;  	//Sita
 
-//only on page load
-function setSessionInstructions() {
-    let $si = $('.session-instructions');
 
-    if (sessionObject.sessionType === 'identifySingleChart') {
-        $si.text("Press the number corresponding to the chart's state");
-    }
-    else if (sessionObject.sessionType === 'identifySequentialCharts') {
-        $si.text("Press the number corresponding to each chart's state");
-        outlineChart(answerIndex);
-    }
-    else if (sessionObject.sessionType === 'identifyUniqueChart') {
-        if (sessionObject.testPhase === 'trainingB' || sessionObject.testPhase === 'performanceA') {
-            let uniqueState = sessionObject.uniqueChartState;
-
-            if (sessionObject.isDynamic){
-				//showChartOverlays();		//sita
-				$si.html(`Task: Press the space bar when a chart has entered <b>state ${uniqueState}</b>`);
-				userReady = true;
-			}else{
-				showChartOverlays();		//sita
-				$si.html(`Read the task, then press <b>Ctrl</b> to start<br>Task: Press the space bar when you find the chart in <b>state ${uniqueState}</b>`);
-				userReady = false;
-			}
-		}
-        else if (sessionObject.testPhase === 'performanceB') {
-            if (sessionObject.isDynamic){
-				//showChartOverlays();		//sita
-                $si.html('Task: Press the space bar when a chart has entered a unique state');
-				userReady = true;
-			}else{
-				showChartOverlays();		//sita
-                $si.html('Read the task, then press <b>Ctrl</b> to start<br>Task: Press the space bar when you find the chart in a unique state');
-				userReady = false;
-			}
-		}
-    }
-}
 
 function drawCharts(isUniqueChartTransition) {
     if (sessionObject.sessionType === 'infoPage') {
@@ -233,11 +179,9 @@ function drawCharts(isUniqueChartTransition) {
                 }
                 else { // Object - This is the chart which will change to the unique state
                     if (dynamicChartsInterval < sessionObject.transitionAfterIntervals) {
-                        dataForDb.transitionStarted = false;
                         sessionData.push(chart.startStates[dynamicChartsInterval % chart.startStates.length])
                     }
                     else {
-                        dataForDb.transitionStarted = true;
                         sessionData.push(chart.endStates[dynamicChartsInterval % chart.endStates.length])
                     }
                 }
@@ -311,255 +255,14 @@ function hideChartOverlays() {
     $('.overlay').hide();
 }
 
-/******************
- ANSWER MANAGEMENT
-******************/
-function processAnswer(userAnswer) {
-    if (sessionObject.sessionType === 'identifySingleChart') {
-        dataForDb.triggerTime = Date.now();
-        dataForDb.participantAnswerState = userAnswer;
-        markAnswer(answerIndex, userAnswer, sessionData[0].state);
-    }
-    else if (sessionObject.sessionType === 'identifySequentialCharts') {
-        let answerObject = {
-            chartIndex: answerIndex,
-            chartState: sessionData[answerIndex].state,
-            participantAnswerState: userAnswer,
-            participantAnswerTime: Date.now()
-        };
 
-        dataForDb.sequentialChartAnswers.push(answerObject);
-
-        markAnswer(answerIndex, userAnswer, sessionData[answerIndex].state);
-
-        answerIndex++;
-        outlineChart(answerIndex);
-    }
-    else if (sessionObject.sessionType === 'identifyUniqueChart') {
-        dataForDb.uniqueChartState = sessionObject.uniqueChartState;
-        dataForDb.uniqueChartIndex = sessionObject.uniqueChartIndex;
-        dataForDb.participantAnswerIndex = userAnswer;
-        dataForDb.participantAnswerState = sessionData[userAnswer].state;
-        dataForDb.clickTime = Date.now();
-		dataForDb.userReadyTime;
-		//console.log("dataForDb.userReadyTime: "+dataForDb.userReadyTime);
-
-        markAnswer(userAnswer, userAnswer, sessionObject.uniqueChartIndex, true);
-        hideChartOverlays();
-    }
-
-    if (answerIndex === sessionObject.sessionData.length || sessionObject.sessionType === 'identifyUniqueChart') {
-        endSession();
-    }
-}
-
-function markAnswer(i, userAnswer, correctAnswer, identifyUniqueChartPhase) {
-    let isCorrect = parseInt(userAnswer) === parseInt(correctAnswer);
-
-    let feedback = svg.append("g").attrs({
-        transform: "translate("
-        + (feedbackTranslateX + Math.floor(i) % tiling * (side + outerMargin)) + ", "
-        + (feedbackTranslateY + Math.floor(i / tiling) * (side + outerMargin)) + ")"
-    });
-
-    let text = feedback.append("text").attrs({
-        y: side - 18,
-        x: 0,
-        height: 20,
-        width: side,
-        'text-anchor': 'middle'
-    });
-
-    let tspan1 = text.append('tspan'); // Includes YES or NO
-
-    if (sessionObject.testPhase === 'performanceA' || sessionObject.testPhase === 'performanceB') {
-        tspan1.text('Answer recorded').attr('fill', 'white');
-    }
-    else if (isCorrect) {
-        if (identifyUniqueChartPhase) {
-            // Don't need to show userAnswer here, which is just the index of the chart they chose
-            tspan1.text("Correct").attr("fill", 'green');
-        }
-        else { // identifySequentialCharts
-            tspan1.text("YES: " + userAnswer).attr("fill", 'green');
-        }
-    }
-    else { // Incorrect
-        if (identifyUniqueChartPhase) {
-            tspan1.text("Incorrect").attr("fill", 'red');
-
-            // Show the actual correct answer
-            feedback = svg.append("g").attrs({
-                transform: "translate("
-                + (feedbackTranslateX + Math.floor(correctAnswer) % tiling * (side + outerMargin)) + ", "
-                + (feedbackTranslateY + Math.floor(correctAnswer / tiling) * (side + outerMargin)) + ")"
-            });
-
-            feedback.append('text').text('State ' + sessionObject.uniqueChartState).attrs({
-                y: side-20,
-                x: 0,
-                height: 20,
-                width: side,
-                fill: 'white',
-                'text-anchor': 'middle'
-            });
-
-            outlineChart(correctAnswer, true);
-        }
-        else { // identifySequentialCharts
-            tspan1.text("NO. ").attr("fill", 'red');
-
-            let tspan2 = text.append('tspan');
-            tspan2.text('Answer: ' + correctAnswer).attrs({
-                fill: 'white'
-            })
-        }
-    }
-}
-
-function outlineChart(chartIndex, markingAsCorrect) {
-    let $allOutlines = $('.outline');
-    $allOutlines.hide();
-
-    let $outline = $allOutlines.eq(chartIndex);
-
-    if (markingAsCorrect === true) {
-        // Leave enough space for the word 'Correct' under chart
-        let oldHeight = parseInt($outline.attr('height'));
-        $outline.attr('height', oldHeight + 18);
-    }
-
-    $outline.show();
-}
-
-/***********
- NAVIGATION
-***********/
-function showContinuePrompt() {
-    $('.continue-prompt').show();
-}
-
-// No longer used
-function startReloadCountdown() {
-    let $bar = $('.continue-progress-bar');
-    let percent = 0;
-    let duration = 7000;
-    let counter = setInterval(moveProgressBar, duration/100);
-
-    $bar.css('transition', 'width ' + duration/100/1000 + 's linear');
-
-    function moveProgressBar() {
-        if (percent === 100) {
-            clearInterval(counter);
-            document.location.reload();
-        }
-        else {
-            $bar.css('width', percent + '%');
-            percent++;
-        }
-    }
-}
 
 /***************
  EVENT HANDLERS
 ***************/
-$(document).on('click', '.info-page-continue-button', function() {
-    console.log('Recording answer (infoPage):', dataForDb);
-
-    // Quick-fix for the Copy and Continue page
-    dataForDb.participantId = sessionStorage.participantId;
-
-    $.ajax({
-        type: 'post',
-        url: '/answers',
-        data: dataForDb,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-        },
-        success: function () {
-            incrementSessionIndex();
-            document.location.reload();
-        }
-    });
-});
-
-$(document).on('click', '.overlay', function(event) {
-	let chartIndex = $(event.target).parent().data('chart-index');
-	processAnswer(chartIndex);
-});
-
-
-window.onkeydown = function(e) {
-    if (keyCurrentlyDown) return;
-    keyCurrentlyDown = true;
-
-    let key = e.keyCode ? e.keyCode : e.which;
-    let keyLiteral = String.fromCharCode(key);
-    let st = sessionObject.sessionType;
-	
-	if (key === 17) {	//sita
-		hideChartOverlays();
-		//record time for database
-		dataForDb.userReadyTime = Date.now();
-		userReady = true;
-	}
-    else if (sessionComplete) {
-        if (key === 13) {			//enter key
-            document.location.reload();
-			userReady = false;
-        }
-        e.preventDefault();
-        return false; // Prevent space bar from scrolling page
-    }
-    else if (st === 'identifySingleChart' && ['1', '2', '3', '4'].includes(keyLiteral)) {
-        processAnswer(keyLiteral);
-    }
-    else if (st === 'identifySequentialCharts' && ['1', '2', '3', '4'].includes(keyLiteral)) {
-        processAnswer(keyLiteral);
-    }
-	// If task is identifyUniqueChart + spacebar  is pressed -> record timestamp
-    else if (st === 'identifyUniqueChart' && keyLiteral === ' ' && userReady === true) {		//spacebar
-			dataForDb.triggerTime = Date.now();
-
-        if (drawChartsInterval !== undefined) {
-            drawChartsInterval.stop();
-        }
-
-        clearTimeout(uniqueChartTransitionTimeout);
-
-        if (sessionObject.isDynamic
-            && dynamicChartsInterval < sessionObject.transitionAfterIntervals
-            && sessionObject.testPhase === 'trainingB')
-        {
-            endSession();
-            $('.session-instructions').html(
-                `<span style="color: red;">Chart had not yet entered state ` + sessionObject.uniqueChartState + `</span>`
-            );
-        }
-        else {
-            showChartOverlays();
-        }
-		
-        e.preventDefault();
-        return false; // Prevent space bar from scrolling page
-    }
-    else if (keyLiteral === ' ') { 		//spacebar
-		e.preventDefault();
-        return false;
-    }
-};
 
 window.onkeyup = function(e) {
     keyCurrentlyDown = false;
-};
-
-// Emergency debug bar toggle
-document.onkeyup = function(e) {
-    let key = e.keyCode ? e.keyCode : e.which;
-    let keyLiteral = String.fromCharCode(key);
-    if (e.ctrlKey && keyLiteral === 'D') {
-        $('.debug-bar').toggle();
-    }
 };
 
 /*********
@@ -571,42 +274,6 @@ function type(d) {
     return d;
 }
 
-function prepareDataForDbObject() {
-    dataForDb = Object.assign(dataForDb, {
-        participantId: sessionStorage.participantId,
-        computerUuid: localStorage.computerUuid,
-        chartType: chartType,
-        dataSource: dataSource, // Recorded in case we work with more than one source
-        sessionIndex: sessionStorage.sessionIndex,
-        testPhase: sessionObject.testPhase,
-        sessionType: sessionObject.sessionType,
-        transitionAfter: sessionObject.transitionAfterIntervals,
-        sessionStartTime: Date.now(),
-        sequentialChartAnswers: []
-    });
-    if (sessionObject.sessionType !== 'infoPage') {
-        dataForDb = Object.assign(dataForDb, {
-            numberOfCharts: sessionData.length,
-            isDynamic: sessionObject.isDynamic,
-        });
-    }
-}
-
-$(document).ready(function() {
-    d3.json(dataSource, /*type,*/ function(error, d) {
-        if (error) throw error;
-        data = d;
-        sessionObject = getSessionObject();
-		drawCharts();
-        // drawCharts(); // D3 V4 (temporary fix for static charts)
-        if (!sessionObject) return;
-        showDebugInfo();
-        setSessionInstructions();
-        prepareDataForDbObject();
-		console.log("sessionStartTime: "+dataForDb.sessionStartTime);
-    });
-});
-
 /*********************************
  FOR CHART TYPE-SPECIFIC JS FILES
 *********************************/
@@ -614,82 +281,4 @@ function convertDataObjectToKeyValuePairs(dataObject) {
     return ['q', 'm', 'b', 'h'].map(function(key) {
         return { key: key, value: dataObject[key], dataObject: dataObject }
     });
-}
-
-/******
- DEBUG
-******/
-function showDebugInfo() {
-    let $debugBar = $('.debug-bar');
-
-    if (document.location.search.split('?')[1] !== 'debug') {
-        $debugBar.hide();
-    }
-    else {
-        $debugBar.show();
-    }
-
-    $debugBar.append(
-        `<select class="chart-type-selector">
-            <option value="/barchart">Bar chart</option>
-            <option value="/boxchart">Box chart</option>
-			<option value="/ibqchart">Improved box chart</option>
-			<option value="/ibcchart">Improved box chart full</option>
-            <option value="/eidchart">EID chart</option>
-        </select>`
-    );
-
-    $('.chart-type-selector').val(document.location.pathname);
-
-    $(document).on('change', '.chart-type-selector', function() {
-        document.location.pathname = $(this).val();
-    });
-
-    $debugBar.append('<select class="session-selector"></select>');
-
-    let $sessionSelector = $('.session-selector');
-
-    let $trainingAOptgroup = $('<optgroup label="Training A (sequential charts, feedback given)"></optgroup>').appendTo($sessionSelector);
-    data.trainingA.forEach(function(session) {
-        appendSessionToOptgroup('trainingA', session, $trainingAOptgroup);
-    });
-
-    let $trainingBOptgroup = $('<optgroup label="Training B (told unique state, feedback given)"></optgroup>').appendTo($sessionSelector);
-    data.trainingB.forEach(function(session) {
-        appendSessionToOptgroup('trainingB', session, $trainingBOptgroup);
-    });
-
-    let $performanceAOptgroup = $('<optgroup label="Performance A (told old state, no feedback given)"></optgroup>').appendTo($sessionSelector);
-    data.performanceA.forEach(function(session) {
-        appendSessionToOptgroup('performanceA', session, $performanceAOptgroup);
-    });
-
-    let $performanceBOptgroup = $('<optgroup label="Performance B (not told unique state, no feedback given)"></optgroup>').appendTo($sessionSelector);
-    data.performanceB.forEach(function(session) {
-        appendSessionToOptgroup('performanceB', session, $performanceBOptgroup);
-    });
-
-    $sessionSelector.val(sessionStorage.sessionIndex);
-
-    $(document).on('change', '.session-selector', function() {
-        sessionStorage.sessionIndex = $(this).val();
-        document.location.reload();
-    });
-
-    function appendSessionToOptgroup(testPhase, session, $optGroup) {
-        if (session.sessionType === 'infoPage') {
-            let pf = session.pageFile;
-            let fileName = pf.substring(pf.lastIndexOf('/')+1, pf.lastIndexOf('.'));
-            $optGroup.append(
-                `<option value='${session.sessionIndex}'>
-                    ${session.sessionIndex}: ${testPhase} - infoPage (${fileName})
-                </option>`);
-        }
-        else {
-            $optGroup.append(
-                `<option value='${session.sessionIndex}'>
-                    ${session.sessionIndex}: ${testPhase} - ${session.sessionType} (${session.isDynamic ? 'dynamic' : 'static'}, ${session.sessionData.length} charts)
-                </option>`);
-        }
-    }
 }
