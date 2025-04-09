@@ -13,7 +13,7 @@ library(rstatix)
 ##### Import data ############################
 
 # location of files 
-data_dir <- "C:\\Git\\SV_MasterThesis\\data"
+data_dir <- ".\\data"
 
 
 all_data_df <- read_csv(file.path(data_dir, "results_8_32_72.csv"))
@@ -116,6 +116,12 @@ dynamic_known_df <- rbind(dynamic_known_df, temp_df)
 agg_accuracy_ID <- dynamic_known_df %>%
   group_by(participant_id, chart_type, number_of_charts, test_phase, accuracy) %>%
   summarize(frequency=n(), accuracy_proportion=n()/4) 
+agg_accuracy_ID$accuracy_proportion <- ifelse(is.na(agg_accuracy_ID$accuracy), 0, agg_accuracy_ID$accuracy_proportion)
+
+# plot accuracy 
+ggplot(data=agg_accuracy_ID, aes(x=chart_type, y=accuracy_proportion, fill=number_of_charts))+
+  geom_jitter(aes(colour = number_of_charts))
+
 
 # accuracy per chart_type, number_of_charts
 agg_accuracy_tot <- dynamic_known_df %>%
@@ -217,9 +223,10 @@ CL_plot <- ggplot(agg_RT_tot, aes(x=number_of_charts, y=mean_rt, colour=chart_ty
   geom_point(position = position_dodge(0.4)) +
   labs(
     x = "Number of Displays",
-    y = "Mean RT in msec",
+    y = "",
     colour = "Display Type"
-  )
+  )+
+  theme(legend.position="none")
 CL_plot
 
 
@@ -288,6 +295,23 @@ pwc <- agg_RT_ID %>%
   )
 pwc
 
+
+pwc$displays <- paste(pwc$group1, pwc$group2, sep="-")
+
+# confidence interfall plot
+CI_pairwise <- ggplot(pwc, aes(x=number_of_charts, y=estimate, colour=displays)) + 
+  geom_errorbar(aes(ymin=conf.low, ymax=conf.high), width=.3, position = position_dodge(0.4)) +
+  #geom_line(position = position_dodge(0.4)) +
+  geom_point(position = position_dodge(0.4)) +
+  geom_hline(yintercept = 0, linetype = "dotted") + 
+  labs(
+    title = "",
+    x = "Number of Displays",
+    y = "",
+    colour = "Display Type"
+  )+
+  theme(legend.position="none")
+CI_pairwise
 
 
 
