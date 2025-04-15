@@ -1,16 +1,4 @@
-// Your data object
-const d = {
-  state: 1,
-  q: 46,
-  m: 66,
-  b: 25,
-  h: 86
-};
-
-// convert to an array
-const sessionData = Object.values(d); 
-
-const svg = d3.select("#chart");
+chartType = 'eid';
 
 // Visualisation setup
 innerMargin = 0;
@@ -26,55 +14,49 @@ height = side - margin.top - margin.bottom;
 initialOffset = { left: 10, top: 20 };
 
 // Create new linear scale
-let xScale = d3.scaleLinear().range([0, side/2 - 3 * innerMargin]);
+let xScale = d3.scale.linear().range([0, side/2 - 3 * innerMargin]);
 
 // Set domain of scale
 xScale.domain([0, 100]);
 
 // Create new linear scale for the Y axis.
-let yScale = d3.scaleLinear().range([0, side/2 - 3 * innerMargin]);
+let yScale = d3.scale.linear().range([0, side/2 - 3 * innerMargin]);
 yScale.domain([100, 0]);
 
 // Create a label for the X axis.
-let xAxis = d3.axisBottom().scale(xScale).ticks(4);
+let xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(4);
 
 // Create a label for the Y axis.
-let yAxis = d3.axisRight().scale(yScale).ticks(4);
+let yAxis = d3.svg.axis().scale(yScale).orient("right").ticks(4);
 
-
+function endall(transition, callback) {
+    if (typeof callback !== "function") throw new Error("Wrong callback in endall");
+    if (transition.size() === 0) { callback() }
+    var n = 0;
+    transition
+        .each(function() { ++n; })
+        .each("end", function() { if (!--n) callback.apply(this, arguments); });
+}
 
 let boxes;
 
-// Create a selection (.box) for every session in sessionData array
-boxes = svg.selectAll('.box').data(sessionData);
-
-let charts = boxes.enter().append("g")
-    .attr({
-        class: 'box',
-        'data-chart-index': function(d, i) { return i; },
-        transform: function(d,i) { return "translate(" +
-            (initialOffset.left + Math.floor(i) % 1 * (side + outerMargin)) + ", " +
-            (initialOffset.top + Math.floor(i / (1)) * (side + outerMargin)) + ")";
-        }
-    });
-
-let xAxes = boxes.selectAll('.x.axis').data(function(d) { return [d]; });
-
-// Append a label for the X axis
-xAxes.enter().append("g").attr({
-    class: "x axis",
-    transform: function(d,i) {
-      return "translate(" +                  
-      (Math.floor(i) % 1 * (side + outerMargin) + side / 2 - xScale(d.h)) + ", " +
-      (side + Math.floor(i / (1)) * (side + outerMargin) + xScale(30)) + ")"        
-    }
-  }).call(xAxis);
-
-
-  
 function _draw(isUniqueChartTransition) {
     let intervalDuration = dynamicChartsIntervalDuration;
 
+    // Create a selection (.box) for every session in sessionData array
+    boxes = svg.selectAll('.box').data(sessionData);
+
+    let charts = boxes.enter().append("g")
+        .attr({
+            class: 'box',
+            'data-chart-index': function(d, i) { return i; },
+            transform: function(d,i) { return "translate(" +
+                (initialOffset.left + Math.floor(i) % tiling * (side + outerMargin)) + ", " +
+                (initialOffset.top + Math.floor(i / (tiling)) * (side + outerMargin)) + ")";
+            }
+        });
+
+    let xAxes = boxes.selectAll('.x.axis').data(function(d) { return [d]; });
 
     // Append a label for the X axis
     xAxes.enter().append("g").attr({

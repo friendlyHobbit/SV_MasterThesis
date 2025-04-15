@@ -1,0 +1,90 @@
+<script>
+    $(document).ready(function() {
+        let chartType = document.location.pathname.slice(1);
+
+        if (chartType === 'barchart') {
+            $('.strategies').html(
+                `The state is determined by the relative size difference (slope) between the first and second bar
+                as well as the relative size difference (slope) between the third and the fourth bar.<br><br>
+                <p>State <b>1</b> = First bar <u>shorter</u> than the second, and third bar <u>shorter</u> than the fourth. (Up, up)</p>
+                <p>State <b>2</b> = First bar <u>shorter</u> than the second, and third bar <u>longer</u> than the fourth. (Up, down)</p>
+                <p>State <b>3</b> = First bar <u>longer</u> than the second, and third bar <u>shorter</u> than the fourth. (Down, up)</p>
+                <p>State <b>4</b> = First bar <u>longer</u> than the second, and third bar <u>longer</u> than the fourth. (Down, down)</p>`
+            )
+            $('.example-image').attr('src', 'images/bar-1.png');
+        }
+        else if (chartType === 'boxchart') {
+            $('.strategies').html(
+                `To identify the state, judge the centre of gravity of the light-gray box.<br><br>
+                <p>State <b>1</b> = The centre of gravity is offset towards the <u>upper left</u> corner.</p>
+                <p>State <b>2</b> = The centre of gravity is offset towards the <u>upper right</u> corner.</p>
+                <p>State <b>3</b> = The centre of gravity is offset towards the <u>lower left</u> corner.</p>
+                <p>State <b>4</b> = The centre of gravity is offset towards the <u>lower right</u> corner.</p>`
+            )
+            $('.example-image').attr('src', 'images/box-1.png');
+        }
+		else if (chartType === 'improvedboxchart') {
+            $('.strategies').html(
+                `To identify the state, judge the centre of gravity of the light-gray box.<br><br>
+                <p>State <b>1</b> = The centre of gravity is offset towards the <u>upper left</u> corner.</p>
+                <p>State <b>2</b> = The centre of gravity is offset towards the <u>upper right</u> corner.</p>
+                <p>State <b>3</b> = The centre of gravity is offset towards the <u>lower left</u> corner.</p>
+                <p>State <b>4</b> = The centre of gravity is offset towards the <u>lower right</u> corner.</p>`
+            )
+            $('.example-image').attr('src', 'images/improvedbox-1.png');
+        }
+        else if (chartType === 'eidchart') {
+            $('.strategies').html(
+                `To identify the state, look for the dot.<br><br>
+                <p>State <b>1</b> = The dot is in the <u>upper left</u> square.</p>
+                <p>State <b>2</b> = The dot is in the <u>upper right</u> square.</p>
+                <p>State <b>3</b> = The dot is in the <u>lower left</u> square.</p>
+                <p>State <b>4</b> = The dot is in the <u>lower right</u> square.</p>`
+            )
+            $('.example-image').attr('src', 'images/eid-1.png');
+        }
+        $('.example-image-captions').addClass(chartType);
+    });
+</script>
+
+<div class="info">
+    <h1>Experiment on Reading Charts</h1>
+
+    <p>
+        In this experiment you will see a large number of charts, each representing 4 variables.
+    </p>
+
+    <p>
+        The 4 variables of a chart represent a <b>system state</b>, which can be either <b>1</b>, <b>2</b>, <b>3</b>, or <b>4</b>.
+    </p>
+
+    <p class="strategies"></p>
+
+    <h2>Chart examples</h2>
+
+    <img class="example-image" /><br>
+    <div class="example-image-captions">
+        <span>State 1</span>
+        <span>State 2</span>
+        <span>State 3</span>
+        <span>State 4</span>
+    </div>
+
+    <p><u>You should remember how each state looks.</u></p>
+
+    <h2>Fast and accurate</h2>
+
+    <p>
+        It is important that you try to be as accurate as possible while completing the tasks without unnecessary delays.
+        The pages are divided into training and performance checks.
+        When training, you will receive immediate feedback on your answers.
+        Do not waste time on analysing the results too much.
+        During the performance check, you will receive no feedback on your answers.
+    </p>
+
+    <p>
+        <button class="info-page-continue-button">
+            Begin the experiment →
+        </button>
+    </p>
+</div>
