@@ -1,5 +1,5 @@
 // Your data object
-const d = {
+const test_data = {
   state: 1,
   q: 46,
   m: 66,
@@ -7,9 +7,8 @@ const d = {
   h: 86
 };
 
-// convert to an array
 //const sessionData = Object.values(d); 
-const sessionData = [d]; 
+const sessionData = [test_data]; 
 
 // Visualisation setup
 innerMargin = 0;
@@ -41,8 +40,8 @@ let yAxis = d3.axisRight().scale(yScale).ticks(4);
 // set up svg, Append svg element to the body and store reference as 'svg'
 svg = d3.select('.main').append('svg')
     .attr("class", 'chart ' + document.location.pathname.split('/')[1])
-    .attr("viewBox", "0 0 2600 1260")
-    .attr("preserveAspectRatio", "xMinYMin meet");
+    //.attr("viewBox", "0 0 2600 1260")
+    //.attr("preserveAspectRatio", "xMinYMin meet");
 
 
 function convertDataObjectToKeyValuePairs(dataObject) {
@@ -56,7 +55,7 @@ let boxes = svg.selectAll('.box').data(sessionData);
 
 let charts = boxes.enter().append("g")
     .attr("class", "box") // Defines the .box class
-    .attr("data-chart-index", function(d, i) { return i; })
+    .attr("data-chart-index", function(d, i) { console.log(d); return i; }) // d returns data, i returns nothing (i is empty)
     .attr("transform", function(d, i) {
         return "translate(" +
             (initialOffset.left + Math.floor(i) % 1 * (side + outerMargin)) + ", " +
@@ -64,34 +63,39 @@ let charts = boxes.enter().append("g")
     });
 
 
-let xAxes = boxes.selectAll('.x.axis').data(function(d) { return [d]; });
-
 // Append a label for the X axis
-xAxes.enter().append("g")
+svg.selectAll('.x.axis')
+    .data(sessionData)
+    .enter()
+    .append("g")
     .attr("class", "x axis")
-    .attr("translate", function(d,i) {
-        return "translate(" +        
-        (Math.floor(i) % tiling * (side + outerMargin) + side / 2 - xScale(d.h)) + ", " +
-        (side + Math.floor(i / (tiling)) * (side + outerMargin) + xScale(30)) + ")"
-    }).call(xAxis);
+    .attr("transform", function(d, i) {
+        return "translate(" +
+            (Math.floor(i) % tiling * (side + outerMargin) + side / 2 - xScale(d.h)) + ", " +
+            (side + Math.floor(i / (tiling)) * (side + outerMargin) + xScale(30)) + ")"
+    })
+    .call(xAxis);
 
-
-let yAxes = boxes.selectAll('.y.axis').data(function(d) { return [d]; });
 
 // Append a label for the Y axis
-yAxes.enter().append("g")
+svg.selectAll('.y.axis')
+    .data(sessionData)
+    .enter()
+    .append("g")
     .attr("class", "y axis")
-    .attr("transform", function(d, i) { return "translate(" +
-        (Math.floor(i) % tiling * (side + outerMargin) + side + xScale(30)) + ", " +
-        (1 + Math.floor(i / (tiling)) * (side + outerMargin) + side / 2 - xScale(100 - d.q)) + ")"
-    }).call(yAxis);
+    .attr("transform", function(d, i) {
+        return "translate(" +
+            (Math.floor(i) % tiling * (side + outerMargin) + side + xScale(30)) + ", " +
+            (1 + Math.floor(i / (tiling)) * (side + outerMargin) + side / 2 - xScale(d.q)) + ")"
+    })
+    .call(yAxis);
 
-
-let dashedRects = boxes.selectAll('.dashed-rect').data(function(d) { return [d]; });
 
 // Append the rectangle which is bottom-left of the circle
-dashedRects.enter().append("rect")
-    .attr("class", 'dashed-rect')
+svg.selectAll('dashed-rect')
+    .data(sessionData)
+    .enter()
+    .append("rect")
     .attr("x", function(d, i) { return Math.floor(i) % tiling * (side + outerMargin) + side / 2 + xScale(d.b - d.h) })
     .attr("y", function(d, i) { return 1 + Math.floor(i / (tiling)) * (side + outerMargin) + side / 2 - xScale(d.m - d.q) })
     .attr("width", function(d, i) { return side / 2 - xScale(d.b - d.h) })
@@ -102,15 +106,13 @@ dashedRects.enter().append("rect")
     .attr("stroke-dasharray", "2,2")
     .attr("stroke-opacity", 1);
 
-
-let circles = boxes.selectAll('.circle').data(function(d) { return [d]; });
-
 // Append the circle
-circles.enter().append("circle")
-    .attr("class", 'circle')
-    .attr("cx", function(d, i) { return side / 2 + xScale(d.b - d.h) })
-    .attr("cy", function(d, i) { return side / 2 - xScale(d.m - d.q) })
-    .attr("transform", function(d, i) { return "translate(" + Math.floor(i) % tiling * (side + outerMargin) + ", " + Math.floor(i / (tiling)) * (side + outerMargin) + ")" })
+svg.selectAll("circle")
+    .data(sessionData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => side / 2 + xScale(d.b - d.h))
+    .attr("cy", d => side / 2 - xScale(d.m - d.q))
     .attr("r", 4)
     .attr("fill", "#fff");
 
@@ -167,7 +169,6 @@ charts.append('rect')
     .attr("height", 193)
     .attr("x", -7)
     .attr("y", -7);
-
 
 charts.append('rect')
     .attr("class", "overlay")
