@@ -1,14 +1,14 @@
-// Your data object
-const test_data = {
-  state: 1,
-  q: 46,
-  m: 66,
-  b: 25,
-  h: 86
-};
+
+let myData = [
+    {state: 1, q: 46, m: 66, b: 25, h: 86},
+    {state: 2, q: 44, m: 70, b: 81, h: 18},
+    {state: 3, q: 75, m: 31, b: 20, h: 83},
+];
+
 
 //const sessionData = Object.values(d); 
-const sessionData = [test_data]; 
+const sessionData = myData[0]; 
+console.log(sessionData);
 
 // Visualisation setup
 innerMargin = 0;
@@ -23,6 +23,7 @@ margin = { top: 10, right: 20, bottom: 30, left: 30 };
 width  = side - margin.left - margin.right;
 height = side - margin.top - margin.bottom;
 initialOffset = { left: 10, top: 20 };
+
 
 // Create new linear scale
 let xScale = d3.scaleLinear().range([0, side/2 - 3 * innerMargin]);
@@ -55,7 +56,7 @@ let boxes = svg.selectAll('.box').data(sessionData);
 
 let charts = boxes.enter().append("g")
     .attr("class", "box") // Defines the .box class
-    .attr("data-chart-index", function(d, i) { console.log(d); return i; }) // d returns data, i returns nothing (i is empty)
+    .attr("data-chart-index", function(d, i) { console.log("data, i", d, i); return i; }) // d returns data, i returns nothing (i is empty)
     .attr("transform", function(d, i) {
         return "translate(" +
             (initialOffset.left + Math.floor(i) % 1 * (side + outerMargin)) + ", " +
@@ -63,19 +64,20 @@ let charts = boxes.enter().append("g")
     });
 
 
+let xAxes = boxes.selectAll('.x.axis').data(function(d) { return [d]; });
+
 // Append a label for the X axis
-svg.selectAll('.x.axis')
-    .data(sessionData)
-    .enter()
-    .append("g")
+xAxes.enter().append("g")
     .attr("class", "x axis")
-    .attr("transform", function(d, i) {
+    .attr("transform", function(d,i) {
         return "translate(" +
             (Math.floor(i) % tiling * (side + outerMargin) + side / 2 - xScale(d.h)) + ", " +
             (side + Math.floor(i / (tiling)) * (side + outerMargin) + xScale(30)) + ")"
-    })
+        })
     .call(xAxis);
 
+console.log("xAxes:", xAxes.enter());
+console.log("Boxes:", boxes);
 
 // Append a label for the Y axis
 svg.selectAll('.y.axis')
